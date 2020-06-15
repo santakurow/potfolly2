@@ -6,7 +6,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Routes from './Routes'
 
-const App = () => <>{Routes}</>
+
+const App = () => (
+  <div>
+    {Routes}
+  </div>
+)
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
