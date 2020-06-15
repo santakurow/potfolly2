@@ -4,15 +4,9 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Home from "./component/Home"
+import Routes from './Routes'
 
-const App = () => {
-  return (
-    <div>
-      <Home />
-    </div>
-  )
-}
+const App = () => <>{Routes}</>
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
