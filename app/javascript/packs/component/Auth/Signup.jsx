@@ -1,8 +1,6 @@
-import React from 'react'
-import { Formik, Form, Field } from 'formik';
-import { Button, LinearProgress, Typography } from '@material-ui/core';
+import React, { useState } from 'react'
+import { Button, Typography, TextField } from '@material-ui/core';
 import { Link } from "react-router-dom"
-import { TextField } from 'formik-material-ui';
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
@@ -16,90 +14,88 @@ const useStyles = makeStyles((theme) => ({
     width: "300px",
     marginBottom: "18px"
   }
-}))
+}));
 
 const Signup = () => {
   const classes = useStyles();
+
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const url = "/users";
+    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+    const data = {
+      user: {
+        nickname: nickname,
+        email: email,
+        password: password,
+        password: password_confirmation
+      }
+    };
+    const config = {
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json"
+      }
+    };
+
+    axios.post(url, data, config)
+      .then(response => {
+        if (response.statusText === "OK") {
+          console.log(response.data)
+        }
+      })
+      .catch(error => console.log("Error: ", error));
+  }
+
   return (
-    <div>
-      <div className={`container text-center ${classes.root}`}>
-        <Typography variant="h4">ユーザー登録</Typography>
-        <Formik
-          initialValues={{
-            email: '',
-            password: '',
-            nickname: '',
-            password_confirmation: ''
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            // const url = "/users";
-            // const data = JSON.stringify(values, null, 2);
-            // const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-            // axios.post(url, data, {
-            //   headers: {
-            //     "X-CSRF-Token": token,
-            //     "Content-Type": "application/json"
-            //   }
-            // })
-            //   .then(response => {
-            //     if (response.statusText === "OK") {
-            //       console.log(response.data);
-            //     }
-            //   })
-            //   .catch(error => console.log(error));
-            console.log(values);
-            setSubmitting(false);
-          }}
-        >
-          {({ submitForm, isSubmitting }) => (
-            <Form autoComplete="off" method="POST" className="my-2">
-              <Field
-                component={TextField}
-                name="nickname"
-                type="text"
-                label="ニックネーム"
-                className={classes.formFiled}
-              />
-              <br />
-              <Field
-                component={TextField}
-                name="email"
-                type="email"
-                label="メールアドレス"
-                className={classes.formFiled}
-              />
-              <br />
-              <Field
-                component={TextField}
-                name="password"
-                type="password"
-                label="パスワード（６文字以上）"
-                className={classes.formFiled}
-              />
-              <br />
-              <Field
-                component={TextField}
-                name="password_confirmation"
-                type="password"
-                label="パスワード（確認）"
-                className={classes.formFiled}
-              />
-              {/* {isSubmitting && <LinearProgress />} */}
-              <br />
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-                onClick={submitForm}
-                className="mt-3"
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <Link to="/" className="mt-2">戻る</Link>
-      </div> 
+    <div className={`container text-center ${classes.root}`}>
+      <Typography variant="h4">ユーザー登録</Typography>
+      <form onSubmit={handleSubmit} >
+        <div className="form-group">
+          <TextField
+            label="ニックネーム"
+            className={`${classes.formFiled}`}
+            type="text"
+            name="nickname"
+            onChange={ e => { setNickname(e.target.value) }}
+          />
+        </div>
+        <div className="form-group">
+          <TextField
+            label="メールアドレス"
+            className={`${classes.formFiled}`}
+            type="email"
+            name="email"
+            onChange={e => { setEmail(e.target.value) }}
+          />
+        </div>
+        <div className="form-group">
+          <TextField
+            label="パスワード(６文字以上)"
+            className={`${classes.formFiled}`}
+            type="password"
+            name="password"
+            onChange={e => { setPassword(e.target.value) }}
+          />
+        </div>
+        <div className="form-group">
+          <TextField
+            label="パスワード（確認）"
+            className={`${classes.formFiled}`}
+            type="password"
+            name="password_confirmation"
+            onChange={e => { setPasswordConfirmation(e.target.value) }}
+          />
+        </div>
+        <Button variant="contained" type="submit" color="primary">登録</Button>
+      </form>
+      <Link to="/" className="mt-2">戻る</Link>
     </div>
   )
 }

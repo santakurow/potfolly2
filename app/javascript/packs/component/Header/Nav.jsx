@@ -33,7 +33,7 @@ const Nav = () => {
             <Link to="/signup" className="nav-link">新規登録</Link>
           </li>
           <li className="nav-item">
-            <a href="/public" className="nav-link">公開する</a>
+            <Link to="/public" className="nav-link">公開する</Link>
           </li>
         </ul>
       </div>
