@@ -8,13 +8,6 @@ RSpec.describe User, type: :model do
   describe "validations" do
 
     describe "nickname" do
-      it "should a nickname is presence" do
-        expect(@user.valid?).to eq(true)
-      end
-  
-      it "should a nickname is within 50 characters" do
-        expect(@user.valid?).to eq(true)
-      end
   
       it "should validate the blank error message for the nickname" do
         @user.nickname = ""
