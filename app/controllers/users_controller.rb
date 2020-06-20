@@ -5,7 +5,8 @@ class UsersController < ApplicationController
     if user.save
       render json: user
     else
-      render json: user.errors
+      error = user.errors.messages.merge(invalid: true)
+      render json: error
     end
   end
 
