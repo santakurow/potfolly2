@@ -17,18 +17,15 @@ const Nav = () => {
   const classes = useStyles();
 
   const [current_user, setCurrentUser] = useState(null);
-  const [logged_in, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const url = "/sessions/restore";
     axios.get(url).then(response => {
       if (response.statusText === "OK") {
         setCurrentUser(response.data);
-        setLoggedIn(true);
       }
     })
       .catch(error => console.log(error));
-    
   }, [])
 
   return (
@@ -44,7 +41,7 @@ const Nav = () => {
           <button className="btn btn-outline-success my-sm-0" type="submit"><SearchIcon fontSize="small" /></button>
         </form>
         <ul className="navbar-nav ml-auto">
-          {!logged_in ?
+          {!current_user ?
             <>
               <li className="nav-item">
                 <Login />
