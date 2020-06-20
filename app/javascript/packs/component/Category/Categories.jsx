@@ -10,10 +10,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     padding: "0 20px",
     fontSize: "16px",
-    justifyContent: "center",
-    "& > *": {
-      // flex: "0 1 30%"
-    }
+    justifyContent: "center"
   },
   cateButton: {
     padding: "10px 20px"

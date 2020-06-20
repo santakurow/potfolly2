@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Typography, TextField, FormControl, InputLabel, FormHelperText, Input } from '@material-ui/core';
+import { Button, Typography, FormControl, InputLabel, FormHelperText, Input } from '@material-ui/core';
 import { Link } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -46,8 +46,7 @@ const Signup = () => {
     resetErrors();
     
     if (errors) {
-      // const messages = Object.keys(errors);
-      // console.log(messages);
+      
       Object.keys(errors).map(error => {
         switch (error) {
           case "nickname":
@@ -58,9 +57,6 @@ const Signup = () => {
           case "email":
             setIsEmailError(true);
             setEmailErrorMessage(errors["email"]);
-            // Object.values(errors["email"]).map(error => {
-            //   console.log(error);
-            // })
             break;
           case "password":
             setIsPasswordError(true);
