@@ -56,11 +56,18 @@ const Nav = () => {
               </li>
             </>
             :
-            <li className="nav-item">
-              <Button>
-                <Link to="/public" className="nav-link">公開する</Link>
-              </Button>
-            </li>
+            <>
+              <li className="nav-item">
+                <Button>
+                  <Link to="/public" className="nav-link">公開する</Link>
+                </Button>
+              </li>
+              <li className="nav-item">
+                <Button>
+                  <Link to="/profile" className="nav-link">プロフィール</Link>
+                </Button>
+              </li>
+            </>
           }
         </ul>
       </div>
