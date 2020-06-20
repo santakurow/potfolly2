@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles"
 import { Typography, Button } from '@material-ui/core';
-import LinkTo from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import { Web, Smartphone, Assessment, SportsEsports, Category, Brush, EmojiNature } from '@material-ui/icons/';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,14 +50,14 @@ const Categories = () => {
       {categories.map((category, i) => (
         <Typography key={Object.values(category)} className={`px-4`}>
           <Button className={classes.cateButton}>
-            <LinkTo
-              href={`/portfolios/${Object.values(category)}`}
+            <Link
+              to={`/portfolios/${Object.values(category)}`}
               color="inherit"
               underline="none"
               className="linkhover-style">
               {category_icons[i]}
               {Object.keys(category)}
-            </LinkTo>
+            </Link>
           </Button>
         </Typography>
       ))}
