@@ -37,7 +37,7 @@ const Nav = () => {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <form className="form-inline my-2 my-lg-0 " id="nav-form">
-          <input className="form-control mr-sm-2 form-search" type="search" placeholder="ポートフォリオを検索" aria-label="search" />
+          <input className="form-control mr-sm-2 form-search" type="search" placeholder="作品を検索" aria-label="search" />
           <button className="btn btn-outline-success my-sm-0" type="submit"><SearchIcon fontSize="small" /></button>
         </form>
         <ul className="navbar-nav ml-auto">
