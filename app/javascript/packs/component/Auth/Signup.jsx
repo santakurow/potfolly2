@@ -61,6 +61,7 @@ const Signup = () => {
           case "password":
             setIsPasswordError(true);
             setPasswordErrorMessage(errors["password"]);
+            break;
         }
       })
     }
@@ -95,7 +96,7 @@ const Signup = () => {
         throw new Error("network error")
       })
       .then(data => {
-        if (data.invalid) {
+        if (data.error) {
           
           setErrors(data);
         }
