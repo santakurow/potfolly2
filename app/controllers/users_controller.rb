@@ -10,8 +10,7 @@ class UsersController < ApplicationController
       login user
       render json: user
     else
-      error = user.errors.messages.merge(invalid: true)
-      render json: error
+      render json: checkErrors(user)
     end
   end
 
