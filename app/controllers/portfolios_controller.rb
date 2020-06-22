@@ -9,6 +9,6 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit(:title, :url, :desc).merge(user_id: current_user.id)
+    params.require(:portfolio).permit(:title, :url, :desc, :image).merge(user_id: current_user.id)
   end
 end

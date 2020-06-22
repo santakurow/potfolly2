@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography, Button, TextField, Paper } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     height: "200px",
     margin: "0 auto",
     marginBottom: "18px",
-    // cursor: "pointer"
   },
   upImg: {
     height: "200px",
@@ -38,7 +37,7 @@ const Public = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [url, setUrl] = useState("");
-  const [errors, setErrors] = useState(null);
+  const [image, setImage] = useState(null);
   const [isTitleError, setIsTitleError] = useState(false);
   const [isDescError, setIsDescError] = useState(false);
   const [isUrlError, setIsUrlError] = useState(false);
@@ -59,14 +58,15 @@ const Public = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const Url = "/portfolios";
-    const data = {
-      portfolio: {
-        title: title,
-        url: url,
-        desc: desc
-      }
+    const data = new FormData();
+    if (image) {
+      data.append("portfolio[image]", image, image.name);
     }
+    data.append("portfolio[title]", title);
+    data.append("portfolio[url]", url);
+    data.append("portfolio[desc]", desc);
+    const Url = "/portfolios";
+
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const config = {
       headers: {
@@ -107,11 +107,20 @@ const Public = () => {
       }).catch(error => console.log(error));
   }
 
+  // useEffect(() => {
+  //   if (isSelect) {
+  //     const form = new FormData();
+  //     form.append("image", image, image.name);
+  //     console.log(form.get("image"));
+  //   }
+  // })
+
   const handleSelectImage = (event) => {
     // console.log(event.target.files[0]);
 
     if (event.target.files && event.target.files[0]) {
       setIsSelect(true);
+      setImage(event.target.files[0]);
       const reader = new FileReader();
       reader.onload = () => {
         const dataURL = reader.result;
@@ -138,7 +147,7 @@ const Public = () => {
               <Typography variant="h5">作品の画像を選択してください。</Typography>
             </Paper>
           }
-          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} />
+          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} accept="image/*" />
         </div>
         <div className="form-group">
           <TextField
