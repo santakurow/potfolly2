@@ -147,7 +147,7 @@ const Public = () => {
               <Typography variant="h5">作品の画像を選択してください。</Typography>
             </Paper>
           }
-          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} accept="image/*" />
+          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} />
         </div>
         <div className="form-group">
           <TextField

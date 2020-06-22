@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Portfolio, type: :model do
   before do
-    @portfolio = create(:portfolio)
+    @portfolio = build(:portfolio)
   end
 
   describe "validation" do
