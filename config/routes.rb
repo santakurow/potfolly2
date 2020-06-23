@@ -10,5 +10,5 @@ Rails.application.routes.draw do
   get '/portfolios', to: "portfolios#index"
   post '/portfolios', to: "portfolios#create"
 
-  # get "/*path", to: "home#index"
+  
 end

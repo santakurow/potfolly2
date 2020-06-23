@@ -1,6 +1,6 @@
 class PortfoliosController < ApplicationController
   def index
-    portfolios = Portfolio.all.with_attached_image.order(created_at: :desc)
+    portfolios = Portfolio.all.includes(:user).with_attached_image.order(created_at: :desc)
     folios = []
     portfolios.each do |portfolio|
       tmp = {}
