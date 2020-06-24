@@ -61,7 +61,7 @@ const Nav = () => {
               </li>
               <li className="nav-item">
                 <Button>
-                  <Link to="/profile" className="nav-link">プロフィール</Link>
+                  <Link to="/mypage" className="nav-link">マイページ</Link>
                 </Button>
               </li>
             </>

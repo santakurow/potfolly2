@@ -1,3 +1,9 @@
+def avoid_api_routes(routes)
+  routes.each do |route|
+    get "#{route}", to: "home#index"
+  end
+end
+
 Rails.application.routes.draw do
   root "home#index"
   get "home/index"
@@ -10,5 +16,7 @@ Rails.application.routes.draw do
   get '/portfolios', to: "portfolios#index"
   post '/portfolios', to: "portfolios#create"
 
-  
+
+  avoid_api_routes ["/public", "/mypage", "/mypage/*path", "/portfolios/*path"]
+
 end
