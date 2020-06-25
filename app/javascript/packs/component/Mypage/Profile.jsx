@@ -10,7 +10,7 @@ const Profile = (props) => {
 
   useEffect(() => {
     
-    console.log(props.user);
+    // console.log(props.user);
       
   }, []) 
 

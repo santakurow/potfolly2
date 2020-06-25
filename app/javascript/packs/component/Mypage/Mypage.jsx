@@ -26,7 +26,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
@@ -75,12 +75,14 @@ const Mypage = (props) => {
   const classes = useStyles();
   const { window } = props;
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [user, setUser] = React.useState(new Object);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState(new Object);
+  const [getAvatar, setAvatar] = useState(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
 
   useEffect(() => {
     axios.get("/sessions/restore")
@@ -99,7 +101,19 @@ const Mypage = (props) => {
         setUser(data);
       })
       .catch(error => console.log(error));
+
   }, [])
+
+  useEffect(() => {
+    if (user.id) {
+      axios.get(`/users/${user.id}/avatarStore`)
+        .then(response => {
+          if (response.statusText === "OK") {
+            setAvatar(response.data);
+          }
+        });
+    }
+  })
 
   const menuIcons = [
     <AccountCircleIcon />,
@@ -134,7 +148,11 @@ const Mypage = (props) => {
           style={{ fontSize: "1.2rem", margin: "8px", display: "inline-block", color: "#333" }}>
           トップへ戻る
         </a>
-        <Avatar className={classes.avatar}>{initialName()}</Avatar>
+        {getAvatar ?
+          <Avatar src={getAvatar} className={classes.avatar} />
+          :
+          <Avatar className={classes.avatar}>{initialName()}</Avatar>
+        }
         <Typography variant="h5" className="text-center mb-3">{user.nickname}</Typography>
       </div>
       <Divider />
@@ -236,7 +254,7 @@ const Mypage = (props) => {
           <Switch>
             <Route path="/mypage" exact component={() => <Profile user={user} />} />
             <Route path="/mypage/profile" component={() => <Profile user={user} />} />
-            <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} />} />
+            <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} avatar={getAvatar} />} />
             <Route path="/mypage/edit-mail-pass">
               <h1>edit-mail-pass</h1>
             </Route>

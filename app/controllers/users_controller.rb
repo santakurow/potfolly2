@@ -20,9 +20,19 @@ class UsersController < ApplicationController
     end
   end
 
-  private
-
-  def user_params
-    params.require(:user).permit(:nickname, :email, :firstname, :lastname, :pr, :password, :password_confirmation)
+  def avatarStore
+    user = User.find(params[:id])
+    if user.avatar.attached?
+      render json: user.image_url
+    else
+      render json: nil
+    end
   end
+  
+  private
+  
+  def user_params
+    params.require(:user).permit(:nickname, :email, :firstname, :lastname, :pr, :password, :password_confirmation, :avatar)
+  end
+
 end
