@@ -1,9 +1,5 @@
 class UsersController < ApplicationController
 
-  # def new
-  #   redirect_to root_path
-  # end
-
   def create
     user = User.new(user_params)
     if user.save
@@ -14,8 +10,14 @@ class UsersController < ApplicationController
     end
   end
 
-  def mypage
-    
+  def update
+    user = User.find(params[:id])
+    user.update(user_params)
+    if user.save
+      render json: user
+    else
+      render json: checkErrors(user)
+    end
   end
 
   private

@@ -5,7 +5,6 @@ import Signup from './component/Auth/Signup'
 import Login from "./component/Auth/Login"
 import Public from "./component/Portfolio/Public"
 import Mypage from "./component/Mypage/Mypage"
-import UploadAvatar from "./component/Mypage/Upload-Avatar"
 
 export default (
   <Router>
@@ -14,7 +13,7 @@ export default (
       <Route path="/signup" exact component={Signup} />
       <Route path="/login" exact component={Login} />
       <Route path="/public" exact component={Public} />
-      <Route path="/mypage" component={Mypage} />
+      <Route path="/mypage/" component={Mypage} />
     </Switch>
   </Router>
 )

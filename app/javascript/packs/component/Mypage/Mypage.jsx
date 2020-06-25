@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom';
+import axios from "axios";
 
 import {
   AppBar,
@@ -27,6 +28,7 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect } from 'react';
 
+import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
 
 const drawerWidth = 300;
@@ -69,15 +71,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Profile = (props) => {
+const Mypage = (props) => {
   const classes = useStyles();
   const { window } = props;
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [user, setUser] = React.useState(new Object);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  useEffect(() => {
+    axios.get("/sessions/restore")
+      .then(response => {
+        if (response.statusText === "OK") {
+          // string型のデータはデフォルトでnull値(undefinedとして表示されてしまう)のため空文字を設定
+          for (const key in response.data) {
+            if (!response.data[key]) {
+              response.data[key] = "";
+            }
+          }
+          return response.data;
+        }
+      })
+      .then(data => {
+        setUser(data);
+      })
+      .catch(error => console.log(error));
+  }, [])
 
   const menuIcons = [
     <AccountCircleIcon />,
@@ -98,11 +120,22 @@ const Profile = (props) => {
     { 'ログアウト': "/logout" }
   ]
 
+  const initialName = () => {
+    const str = user.nickname;
+    if (str) {
+      return str.charAt(0);
+    }
+  }
+
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-        <Avatar className={classes.avatar}>T</Avatar>
-        <Typography variant="h5" className="text-center mb-3">Takuya</Typography>
+        <a href="/"
+          style={{ fontSize: "1.2rem", margin: "8px", display: "inline-block", color: "#333" }}>
+          トップへ戻る
+        </a>
+        <Avatar className={classes.avatar}>{initialName()}</Avatar>
+        <Typography variant="h5" className="text-center mb-3">{user.nickname}</Typography>
       </div>
       <Divider />
       <List>
@@ -152,7 +185,7 @@ const Profile = (props) => {
                   <Route exact path="/mypage">
                       プロフィール
                   </Route>
-                  <Route path="/mypage/profile">
+                  <Route exact path="/mypage/profile">
                       プロフィール
                   </Route>
                   <Route path="/mypage/upload-avatar">
@@ -201,15 +234,9 @@ const Profile = (props) => {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route exact path="/mypage">
-              <h1>profile</h1>
-            </Route>
-            <Route path="/mypage/profile">
-              <h1>profile</h1>
-            </Route>
-            <Route path="/mypage/upload-avatar">
-              <UploadAvatar />
-            </Route>
+            <Route path="/mypage" exact component={() => <Profile user={user} />} />
+            <Route path="/mypage/profile" component={() => <Profile user={user} />} />
+            <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} />} />
             <Route path="/mypage/edit-mail-pass">
               <h1>edit-mail-pass</h1>
             </Route>
@@ -223,4 +250,4 @@ const Profile = (props) => {
   )
 }
 
-export default Profile
+export default Mypage
