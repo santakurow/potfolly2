@@ -30,6 +30,7 @@ import { useEffect, useState } from 'react';
 
 import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
+import EditMailPass from "./Edit-Mail-Pass";
 
 const drawerWidth = 300;
 
@@ -201,16 +202,16 @@ const Mypage = (props) => {
             <Typography variant="h4" className="m-auto font-weight-bold" noWrap>
                 <Switch>
                   <Route exact path="/mypage">
-                      プロフィール
+                      プロフィール編集
                   </Route>
                   <Route exact path="/mypage/profile">
-                      プロフィール
+                      プロフィール編集
                   </Route>
                   <Route path="/mypage/upload-avatar">
                       写真
                   </Route>
                   <Route path="/mypage/edit-mail-pass">
-                      メール・パスワード
+                      メール・パスワード変更
                   </Route>
                   <Route path="/mypage/logout">
                       ログアウト
@@ -255,9 +256,7 @@ const Mypage = (props) => {
             <Route path="/mypage" exact component={() => <Profile user={user} />} />
             <Route path="/mypage/profile" component={() => <Profile user={user} />} />
             <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} avatar={getAvatar} />} />
-            <Route path="/mypage/edit-mail-pass">
-              <h1>edit-mail-pass</h1>
-            </Route>
+            <Route path="/mypage/edit-mail-pass" component={() => <EditMailPass user={user} />} />
             <Route path="/mypage/logout">
               <h1>logout</h1>
             </Route>

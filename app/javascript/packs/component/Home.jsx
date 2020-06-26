@@ -4,16 +4,21 @@ import Nav from './Header/Nav'
 import Categories from "./Category/Categories"
 import Portfolios from "./Portfolio/Portfolios"
 import axios from "axios"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Home = () => {
   const [logged_in, setLog] = useState(false);
   const url = "/sessions/restore"
-  axios.get(url).then(res => {
-    if (res.statusText === "OK") {
-      setLog(true);
-    }
-  })
+
+  useEffect(() => {
+    axios.get(url).then(res => {
+      if (res.statusText === "OK") {
+        if (res.data) {
+          setLog(true);
+        }
+      }
+    })
+  }, [])
   return (
     <div>
       <Nav />
