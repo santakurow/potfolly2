@@ -31,6 +31,7 @@ import { useEffect, useState } from 'react';
 import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
 import EditMailPass from "./Edit-Mail-Pass";
+import Logout from "./Logout";
 
 const drawerWidth = 300;
 
@@ -131,7 +132,7 @@ const Mypage = (props) => {
   const menuRouteLists = [
     { 'プロフィール': "/profile" },
     { '写真': "/upload-avatar"},
-    { 'メール・パスワード': "/edit-mail-pass"},
+    { 'パスワード': "/edit-mail-pass"},
     { 'ログアウト': "/logout" }
   ]
 
@@ -211,7 +212,7 @@ const Mypage = (props) => {
                       写真
                   </Route>
                   <Route path="/mypage/edit-mail-pass">
-                      メールアドレス・パスワード変更
+                      パスワード変更
                   </Route>
                   <Route path="/mypage/logout">
                       ログアウト
@@ -257,9 +258,7 @@ const Mypage = (props) => {
             <Route path="/mypage/profile" component={() => <Profile user={user} />} />
             <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} avatar={getAvatar} />} />
             <Route path="/mypage/edit-mail-pass" component={() => <EditMailPass user={user} />} />
-            <Route path="/mypage/logout">
-              <h1>logout</h1>
-            </Route>
+            <Route path="/mypage/logout" component={() => <Logout user={user} />} />
           </Switch>
         </main>
       </div>

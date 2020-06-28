@@ -80,6 +80,9 @@ const EditMailPass = (props) => {
               }
             })
           }
+          else {
+            location.href = "/mypage/edit-mail-pass"
+          }
         }
         
       })
