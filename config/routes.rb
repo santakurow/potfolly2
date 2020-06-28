@@ -12,8 +12,8 @@ Rails.application.routes.draw do
   patch '/users/:id', to: "users#update"
   get '/users/:id/avatarStore', to: "users#avatarStore"
   
-  post "/resets/", to: 'password_resets#create'
-  
+  post "/resets/:id", to: 'password_resets#create'
+
   post '/sessions', to: "sessions#create"
   get '/sessions/restore', to: "sessions#restore"
 

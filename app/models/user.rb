@@ -1,32 +1,35 @@
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
-
-  attr_accessor :reset_token
+  
+  attr_accessor :reset_password, :reset_password_confirmation
   
   before_save { self.email = email.downcase }
+
+  has_one_attached :avatar
+  has_secure_password
+  
   validates :nickname, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
+  validates :password, presence: true, length: { minimum: 6 }, 
+                       allow_nil: true
 
-  has_one_attached :avatar
-
-  has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  validates :reset_password, length: { minimum: 6 }, confirmation: true,
+                             allow_nil: true,
+                             on: :update
+  validates :reset_password_confirmation, presence: true,
+                             allow_nil: true,
+                             on: :update
   
   def self.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
 
-  def self.new_token
-    SecureRandom.urlsafe_base64
-  end
-
   def create_reset_digest
-    self.reset_token = User.new_token
-    update_columns(reset_digest: User.digest(reset_token))
+    update_attribute(:reset_digest, User.digest(self.reset_password))
   end
 
   def image_url

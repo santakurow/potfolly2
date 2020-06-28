@@ -1,29 +1,51 @@
 import React, { useState } from 'react'
 import { Typography, TextField, Button } from '@material-ui/core'
-import { useEffect } from 'react';
 import axios from "axios";
 
 const EditMailPass = (props) => {
-
-  const [email, setEmail] = useState(props.user.email);
   const [password, setPassword] = useState(props.user.password);
   const [reset_password, setResetPassword] = useState("");
-  const [reset_confirmation, setResetPasswordConfirm] = useState("");
+  const [reset_password_confirmation, setResetPasswordConfirmation] = useState("");
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isResetPasswordError, setIsResetPasswordError] = useState(false);
+  const [isResetPasswordConfirmationError, setIsResetPasswordConfirmationError] = useState(false);
 
-  useEffect(() => {
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [resetPasswordErrorMessage, setResetPasswordErrorMessage] = useState("");
+  const [resetPasswordConfirmationErrorMessage, setResetPasswordConfirmationErrorMessage] = useState("");
 
-  })
+  const initialUpperCase = (err_msg) => {
+    return err_msg.charAt(0).toUpperCase() + err_msg.slice(1)
+  }
+
+  const resetErrors = (attributes) => {
+    const attrs = attributes;
+    for (let i = 0; i < attrs.length; i++) {
+      let errors = attrs[i];
+      if (errors.match(/_/)) {
+        const err = errors.split("_").map(error => {
+          return initialUpperCase(error)
+        });
+        const str = err.toString().replace(/,/g, "");
+        eval(`setIs${str}Error(false)`);
+        eval(`set${str}ErrorMessage("")`);
+      }
+      else {
+        eval(`setIs${initialUpperCase(errors)}Error(false)`);
+        eval(`set${initialUpperCase(errors)}ErrorMessage("")`);
+      }
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const data = {
-      session: {
-        email: email,
+      user: {
         password: password,
-        reset: reset_password,
-        reset_confirmation: reset_confirmation
+        reset_password: reset_password,
+        reset_password_confirmation: reset_password_confirmation
       }
     }
 
@@ -34,35 +56,40 @@ const EditMailPass = (props) => {
       }
     }
 
-    // axios.patch(`/sessions/${props.user.id}`, data, config)
-    //   .then(res => {
-    //     if (res.statusText === "OK") {
-    //       console.log(res.data);
-    //     }
+    axios.post(`/resets/${props.user.id}`, data, config)
+      .then(res => {
+        if (res.statusText === "OK") {
+          if (res.data.error) {
+            
+            const errors = res.data;
+            resetErrors(["password", "reset_password", "reset_password_confirmation"]);
+            Object.keys(errors).map(error => {
+              switch (error) {
+                case "password":
+                  setIsPasswordError(true);
+                  setPasswordErrorMessage(errors["password"]);
+                  break;
+                case "reset_password":
+                  setIsResetPasswordError(true);
+                  setResetPasswordErrorMessage(errors["reset_password"]);
+                  break;
+                case "reset_password_confirmation":
+                  setIsResetPasswordConfirmationError(true);
+                  setResetPasswordConfirmationErrorMessage(errors["reset_password_confirmation"]);
+                  break;
+              }
+            })
+          }
+        }
         
-    //   })
-    //   .catch(error => console.log(error));
+      })
+      .catch(error => console.log(error));
   }
   
   return (
     <div className="container">
       <Typography variant="h5" className="mt-3"></Typography>
       <form onSubmit={handleSubmit} className="py-3">
-        <div className="row mt-3">
-          <div className="col-md-12 col-lg-10 offset-lg-1"
-            style={{padding: "0 20%"}} >
-            <TextField
-              label="メールアドレス"
-              type="email"
-              name="email"
-              variant="outlined"
-              margin="normal"
-              style={{width: "100%"}}
-              defaultValue={props.user.email}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
         <div className="row mt-3">
           <div className="col-md-12 col-lg-10 offset-lg-1"
             style={{padding: "0 20%"}}
@@ -73,7 +100,9 @@ const EditMailPass = (props) => {
               name="password"
               variant="outlined"
               margin="normal"
-              style={{width: "100%"}}
+              style={{ width: "100%" }}
+              error={isPasswordError}
+              helperText={passwordErrorMessage}
               onChange={e => setPassword(e.target.value)}
             />
           </div>
@@ -85,11 +114,12 @@ const EditMailPass = (props) => {
             <TextField
               label="新しいパスワード"
               type="password"
-              name="reset"
+              name="reset_password"
               variant="outlined"
               margin="normal"
-              defaultValue=""
               style={{ width: "100%" }}
+              error={isResetPasswordError}
+              helperText={resetPasswordErrorMessage}
               onChange={e => setResetPassword(e.target.value)}
             />
           </div>
@@ -101,12 +131,13 @@ const EditMailPass = (props) => {
             <TextField
               label="新しいパスワード（確認）"
               type="password"
-              name="reset_confirmation"
+              name="reset_password_confirmation"
               variant="outlined"
               margin="normal"
-              defaultValue=""
               style={{ width: "100%" }}
-              onChange={e => setResetPasswordConfirm(e.target.value)}
+              error={isResetPasswordConfirmationError}
+              helperText={resetPasswordConfirmationErrorMessage}
+              onChange={e => setResetPasswordConfirmation(e.target.value)}
             />
           </div>
         </div>

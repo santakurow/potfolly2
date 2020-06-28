@@ -107,16 +107,7 @@ const Public = () => {
       }).catch(error => console.log(error));
   }
 
-  // useEffect(() => {
-  //   if (isSelect) {
-  //     const form = new FormData();
-  //     form.append("image", image, image.name);
-  //     console.log(form.get("image"));
-  //   }
-  // })
-
   const handleSelectImage = (event) => {
-    // console.log(event.target.files[0]);
 
     if (event.target.files && event.target.files[0]) {
       setIsSelect(true);

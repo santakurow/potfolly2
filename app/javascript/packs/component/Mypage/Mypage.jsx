@@ -211,7 +211,7 @@ const Mypage = (props) => {
                       写真
                   </Route>
                   <Route path="/mypage/edit-mail-pass">
-                      メール・パスワード変更
+                      メールアドレス・パスワード変更
                   </Route>
                   <Route path="/mypage/logout">
                       ログアウト

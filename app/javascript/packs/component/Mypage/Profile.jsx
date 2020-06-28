@@ -5,14 +5,18 @@ import axios from "axios"
 const Profile = (props) => {
 
   const [user, setUser] = useState(props.user);
-  const [errors, setErrors] = useState({});
-  const [isError, setIsError] = useState(false);
+  const [nicknameErrorMessage, setNicknameErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [isNicknameError, setIsNicknameError] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
 
-  useEffect(() => {
-    
-    // console.log(props.user);
-      
-  }, []) 
+  const resetErrors = (attributes) => {
+    const attrs = attributes;
+    for (let i = 0; i < attrs.length; i++) {
+      eval(`setIs${attrs[i].charAt(0).toUpperCase() + attrs[i].slice(1)}Error(false)`);
+      eval(`set${attrs[i].charAt(0).toUpperCase() + attrs[i].slice(1)}ErrorMessage("")`);
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,6 +28,7 @@ const Profile = (props) => {
         firstname: user.firstname,
         lastname: user.lastname,
         nickname: user.nickname,
+        email: user.email,
         pr: user.pr,
       }
     }
@@ -38,10 +43,21 @@ const Profile = (props) => {
       .then(response => {
         if (response.statusText === "OK") {
           // console.log(response.data);
-          setIsError(false);
           if (response.data.error) {
-            setIsError(true);
-            setErrors(response.data);
+            const errors = response.data;
+            resetErrors(["nickname", "email"]);
+            Object.keys(errors).map(error => {
+              switch (error) {
+                case "nickname":
+                  setIsNicknameError(true);
+                  setNicknameErrorMessage(errors["nickname"]);
+                  break;
+                case "email":
+                  setIsEmailError(true);
+                  setEmailErrorMessage(errors["email"]);
+                  break;
+              }
+            })
           }
           else {
             location.href = "/mypage/profile";
@@ -90,11 +106,27 @@ const Profile = (props) => {
               name="nickname"
               defaultValue={user.nickname}
               variant="outlined"
-              className="my-4"
+              margin="normal"
               style={{ width: "100%" }}
-              error={isError}
-              helperText={errors.nickname}
+              error={isNicknameError}
+              helperText={nicknameErrorMessage}
               onChange={e => setUser({[e.target.name]: e.target.value})}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-12">
+          <TextField
+              label="メールアドレス"
+              type="email"
+              name="email"
+              defaultValue={user.email}
+              variant="outlined"
+              margin="normal"
+              style={{ width: "100%" }}
+              error={isEmailError}
+              helperText={emailErrorMessage}
+              onChange={e => setUser({ [e.target.name]: e.target.value })}
             />
           </div>
         </div>
