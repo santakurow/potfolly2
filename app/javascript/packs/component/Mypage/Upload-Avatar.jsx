@@ -18,6 +18,8 @@ const UploadAvatar = (props) => {
   const [avatar, setAvatar] = useState("");
   const [getAttachedAvatar, setAttachedAvatar] = useState(props.avatar);
 
+  const [isDisable, setIsDisable] = useState(false);
+
   const selectImage = (event) => {
     if (event.target.files && event.target.files[0]) {
       setIsSelect(true);
@@ -48,6 +50,7 @@ const UploadAvatar = (props) => {
     axios.patch(url, data, config)
       .then(response => {
         if (response.statusText === "OK") {
+          setIsDisable(true);
           location.href = "/mypage/upload-avatar"
         }
       })
@@ -82,7 +85,8 @@ const UploadAvatar = (props) => {
                   <Button variant="contained" component="label" htmlFor="preview" className="col-lg-6 offset-lg-3" style={{margin: "10px auto"}}>変更</Button>
                 </div>
                 <div className="row m-0">
-                  <Button variant="contained" color="primary" type="submit" className="col-lg-4 offset-lg-4" style={{margin: "10px auto"}}>更新</Button>
+                  <Button variant="contained" color="primary" type="submit" className="col-lg-4 offset-lg-4" style={{ margin: "10px auto" }}
+                  disabled={isDisable}>更新</Button>
                 </div>
               </div>
               :

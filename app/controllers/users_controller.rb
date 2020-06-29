@@ -1,28 +1,23 @@
 class UsersController < ApplicationController
 
-  before_action :get_params_id, only: [:create, :update, :destroy, :avatarStore]
+  before_action :get_params_id, only: [:update, :destroy, :avatarStore]
 
   def create
-    if @user.save
-      login @user
-      render json: @user
+    user = User.new(user_params)
+    if user.save
+      login user
+      render json: user
     else
-      render json: checkErrors(@user)
+      render json: checkErrors(user)
     end
   end
 
   def update
     @user.update(user_params)
     if @user.save
-      render json: user
+      render json: @user
     else
       render json: checkErrors(@user)
-    end
-  end
-
-  def destroy
-    if @user&.destroy
-      render json: @user
     end
   end
 

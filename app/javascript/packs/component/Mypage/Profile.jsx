@@ -9,6 +9,8 @@ const Profile = (props) => {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [isNicknameError, setIsNicknameError] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
+  
+  const [isDisable, setIsDisable] = useState(false);
 
   const resetErrors = (attributes) => {
     const attrs = attributes;
@@ -147,7 +149,8 @@ const Profile = (props) => {
         </div>
         <div className="row">
           <div className="col-md-12 col-lg-2 mt-3">
-            <Button variant="contained" type="submit" color="primary" style={{width: "100%"}}>更新</Button>
+            <Button variant="contained" type="submit" color="primary" style={{ width: "100%" }}
+            disabled={isDisable}>更新</Button>
           </div>
         </div>
       </form>

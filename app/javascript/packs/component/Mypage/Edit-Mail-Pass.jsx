@@ -14,6 +14,8 @@ const EditMailPass = (props) => {
   const [resetPasswordErrorMessage, setResetPasswordErrorMessage] = useState("");
   const [resetPasswordConfirmationErrorMessage, setResetPasswordConfirmationErrorMessage] = useState("");
 
+  const [isDisable, setIsDisable] = useState(false);
+
   const initialUpperCase = (err_msg) => {
     return err_msg.charAt(0).toUpperCase() + err_msg.slice(1)
   }
@@ -81,6 +83,7 @@ const EditMailPass = (props) => {
             })
           }
           else {
+            setIsDisable(true);
             location.href = "/mypage/edit-mail-pass"
           }
         }
@@ -152,6 +155,7 @@ const EditMailPass = (props) => {
             <Button variant="contained"
               type="submit"
               color="primary"
+              disabled={isDisable}
             >
               変更
             </Button>

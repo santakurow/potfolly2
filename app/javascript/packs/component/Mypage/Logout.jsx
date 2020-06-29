@@ -5,6 +5,8 @@ import axios from "axios"
 
 const Logout = (props) => {
 
+  const [isDisable, setIsDisable] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
   
@@ -15,9 +17,10 @@ const Logout = (props) => {
         "Content-Type": "application/json"
       }
     }
-    axios.delete(`/users/${props.user.id}`, config)
+    axios.delete(`/sessions/${props.user.id}`, config)
       .then(res => {
         if (res.statusText === "OK") {
+          setIsDisable(true);
           location.href = "/";
         }
     })
@@ -36,6 +39,7 @@ const Logout = (props) => {
                   display: "block",
                   width: "100%"
                 }}
+                disabled={isDisable}
               >
                 ログアウト
               </Button>

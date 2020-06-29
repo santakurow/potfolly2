@@ -47,6 +47,8 @@ const Public = () => {
 
   const [isSelect, setIsSelect] = useState(false);
 
+  const [isDisable, setIsDisable] = useState(false);
+
   const resetErrors = (attributes) => {
     const attrs = attributes;
     for (let i = 0; i < attrs.length; i++) {
@@ -102,6 +104,7 @@ const Public = () => {
           })
         }
         else {
+          setIsDisable(true);
           location.href = "/"
         }
       }).catch(error => console.log(error));
@@ -138,7 +141,7 @@ const Public = () => {
               <Typography variant="h5">作品の画像を選択してください。</Typography>
             </Paper>
           }
-          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} />
+          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} accept="image/*" />
         </div>
         <div className="form-group">
           <TextField
@@ -179,7 +182,7 @@ const Public = () => {
             onChange={e => setDesc(e.target.value)}
           />
         </div>
-        <Button variant="contained" type="submit" color="primary">公開</Button>
+        <Button variant="contained" type="submit" color="primary" disabled={isDisable}>公開</Button>
       </form>
     </div>
   )

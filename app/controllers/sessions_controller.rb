@@ -14,6 +14,12 @@ class SessionsController < ApplicationController
     render json: current_user
   end
 
+  def destroy
+    user = User.find(params[:id])
+    logout if logged_in?
+    render json: user
+  end
+
   private
 
   def authenticated?(object)

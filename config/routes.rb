@@ -11,17 +11,17 @@ Rails.application.routes.draw do
   post '/users', to: "users#create"
   patch '/users/:id', to: "users#update"
   get '/users/:id/avatarStore', to: "users#avatarStore"
-  delete '/users/:id', to: "users#destroy"
   
   post "/resets/:id", to: 'password_resets#create'
-
+  
   post '/sessions', to: "sessions#create"
+  delete '/sessions/:id', to: "sessions#destroy"
   get '/sessions/restore', to: "sessions#restore"
 
   get '/portfolios', to: "portfolios#index"
   post '/portfolios', to: "portfolios#create"
 
 
-  avoid_api_routes ["/public", "/mypage", "/mypage/*path", "/portfolios/*path"]
+  avoid_api_routes ["/signup", "/public", "/mypage", "/mypage/*path", "/portfolios/*path"]
 
 end

@@ -1,11 +1,12 @@
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
-  
+
   attr_accessor :reset_password, :reset_password_confirmation
   
   before_save { self.email = email.downcase }
 
   has_one_attached :avatar
+  has_many :portfolios, dependent: :destroy
   has_secure_password
   
   validates :nickname, presence: true, length: { maximum: 50 }
