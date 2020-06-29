@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
 
-  # def new
-  #   redirect_to root_path
-  # end
+  before_action :get_params_id, only: [:update, :destroy, :avatarStore]
 
   def create
     user = User.new(user_params)
@@ -14,9 +12,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    @user.update(user_params)
+    if @user.save
+      render json: @user
+    else
+      render json: checkErrors(@user)
+    end
+  end
+
+  def avatarStore
+    if @user.avatar.attached?
+      render json: @user.image_url
+    else
+      render json: nil
+    end
+  end
+  
   private
 
-  def user_params
-    params.require(:user).permit(:nickname, :email, :firstname, :lastname, :pr, :password, :password_confirmation)
+  def get_params_id
+    @user = User.find(params[:id])
   end
+  
+  def user_params
+    params.require(:user).permit(:nickname, :email, :firstname, :lastname, :pr, :password, :password_confirmation, :avatar)
+  end
+
 end

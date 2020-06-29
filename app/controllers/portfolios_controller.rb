@@ -14,6 +14,10 @@ class PortfoliosController < ApplicationController
     end
     render json: folios
   end
+
+  def new
+    redirect_to root_path
+  end
   
   def create
     portfolio = Portfolio.new(portfolio_params)
