@@ -23,6 +23,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isDisable, setIsDisable] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -34,6 +35,7 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setIsDisable(true);
     const url = "/sessions"
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const data = {
@@ -56,9 +58,11 @@ const Login = () => {
       })
       .then(response => {
         if (typeof response === "object") {
+          
           location.href = "/";
         }
         else {
+          setIsDisable(false);
           setError(response);
         }
         
@@ -101,7 +105,14 @@ const Login = () => {
             <Button onClick={handleClose}>
               キャンセル
             </Button>
-            <Button variant="contained" type="submit" color="primary">ログイン</Button>
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              disabled={isDisable}
+            >
+              ログイン
+              </Button>
           </DialogActions>
         </form>
       </Dialog>

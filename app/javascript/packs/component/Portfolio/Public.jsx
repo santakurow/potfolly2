@@ -60,6 +60,8 @@ const Public = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    setIsDisable(true);
+
     const data = new FormData();
     if (image) {
       data.append("portfolio[image]", image, image.name);
@@ -83,8 +85,8 @@ const Public = () => {
         }
       }).then(data => {
         if (data.error) {
+          setIsDisable(false);
           const errors = data;
-          
           resetErrors(["title", "url", "desc"]);
           Object.keys(errors).map(error => {
             switch (error) {
@@ -104,7 +106,6 @@ const Public = () => {
           })
         }
         else {
-          setIsDisable(true);
           location.href = "/"
         }
       }).catch(error => console.log(error));

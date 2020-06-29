@@ -36,6 +36,8 @@ const UploadAvatar = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    setIsDisable(true);
     
     const url = `/users/${props.user.id}`;
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
@@ -50,7 +52,7 @@ const UploadAvatar = (props) => {
     axios.patch(url, data, config)
       .then(response => {
         if (response.statusText === "OK") {
-          setIsDisable(true);
+          
           location.href = "/mypage/upload-avatar"
         }
       })
@@ -84,10 +86,13 @@ const UploadAvatar = (props) => {
                 <div className="row m-0">
                   <Button variant="contained" component="label" htmlFor="preview" className="col-lg-6 offset-lg-3" style={{margin: "10px auto"}}>変更</Button>
                 </div>
-                <div className="row m-0">
-                  <Button variant="contained" color="primary" type="submit" className="col-lg-4 offset-lg-4" style={{ margin: "10px auto" }}
-                  disabled={isDisable}>更新</Button>
-                </div>
+                {isSelected ? 
+                  <div className="row m-0">
+                    <Button variant="contained" color="primary" type="submit" className="col-lg-4 offset-lg-4" style={{ margin: "10px auto" }}
+                    disabled={isDisable}>更新</Button>
+                  </div>
+                  : 
+                  <></>}
               </div>
               :
               <Paper

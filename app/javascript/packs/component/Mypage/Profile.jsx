@@ -22,6 +22,7 @@ const Profile = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsDisable(true);
 
     const url = `/users/${props.user.id}`;
     
@@ -46,6 +47,7 @@ const Profile = (props) => {
         if (response.statusText === "OK") {
           // console.log(response.data);
           if (response.data.error) {
+            setIsDisable(false);
             const errors = response.data;
             resetErrors(["nickname", "email"]);
             Object.keys(errors).map(error => {

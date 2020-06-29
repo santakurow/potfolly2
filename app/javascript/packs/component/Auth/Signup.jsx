@@ -31,6 +31,8 @@ const Signup = () => {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
+  const [isDisable, setIsDisable] = useState(false);
+
   const resetErrors = () => {
     setIsNicknameError(false);
     setIsEmailError(false);
@@ -69,6 +71,7 @@ const Signup = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsDisable(true);
 
     const url = "/users";
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -97,7 +100,7 @@ const Signup = () => {
       })
       .then(data => {
         if (data.error) {
-          
+          setIsDisable(false);
           setErrors(data);
         }
         else {
@@ -177,7 +180,14 @@ const Signup = () => {
             ))}</FormHelperText>
           </FormControl>
         </div>
-        <Button variant="contained" type="submit" color="primary">登録</Button>
+        <Button
+          variant="contained"
+          type="submit"
+          color="primary"
+          disabled={isDisable}
+        >
+          登録
+          </Button>
       </form>
       <Link to="/" className="mt-2">戻る</Link>
     </div>

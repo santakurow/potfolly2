@@ -42,6 +42,8 @@ const EditMailPass = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    setIsDisable(true);
+
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const data = {
       user: {
@@ -62,7 +64,7 @@ const EditMailPass = (props) => {
       .then(res => {
         if (res.statusText === "OK") {
           if (res.data.error) {
-            
+            setIsDisable(false);
             const errors = res.data;
             resetErrors(["password", "reset_password", "reset_password_confirmation"]);
             Object.keys(errors).map(error => {
@@ -83,7 +85,7 @@ const EditMailPass = (props) => {
             })
           }
           else {
-            setIsDisable(true);
+            
             location.href = "/mypage/edit-mail-pass"
           }
         }
