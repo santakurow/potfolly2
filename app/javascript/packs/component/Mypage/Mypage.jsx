@@ -32,6 +32,8 @@ import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
 import EditMailPass from "./Edit-Mail-Pass";
 import Logout from "./Logout";
+import MyPortfolios from "./MyPortfolios";
+import Portfolio from "../Portfolio/Portfolio"
 
 const drawerWidth = 300;
 
@@ -80,6 +82,7 @@ const Mypage = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState(new Object);
   const [getAvatar, setAvatar] = useState(null);
+  const [myPortfolios, setMyPortfolios] = useState(new Object);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -101,21 +104,34 @@ const Mypage = (props) => {
       })
       .then(data => {
         setUser(data);
+        requestAvatar(data.id);
+        requestMyPortfolio(data.id);
       })
       .catch(error => console.log(error));
 
   }, [])
 
-  useEffect(() => {
-    if (user.id) {
-      axios.get(`/users/${user.id}/avatarStore`)
+  const requestAvatar = (user_id) => {
+    if (user_id) {
+      axios.get(`/users/${user_id}/avatarStore`)
         .then(response => {
           if (response.statusText === "OK") {
             setAvatar(response.data);
           }
         });
     }
-  })
+  }
+
+  const requestMyPortfolio = (user_id) => {
+    axios.get(`/myportfolio/${user_id}`)
+      .then(res => {
+        if (res.statusText === "OK") {
+          // console.log(res.data);
+          setMyPortfolios(res.data);
+        }
+      })
+      .catch(error => console.log(error));
+  }
 
   const menuIcons = [
     <AccountCircleIcon />,
@@ -126,7 +142,6 @@ const Mypage = (props) => {
 
   const portfolioIcons = [
     <LibraryBooksIcon />,
-    <CloudUploadIcon />
   ]
 
   const menuRouteLists = [
@@ -134,6 +149,10 @@ const Mypage = (props) => {
     { '写真': "/upload-avatar"},
     { 'パスワード': "/edit-mail-pass"},
     { 'ログアウト': "/logout" }
+  ]
+
+  const portfolioRouteLists = [
+    { 'マイポートフォリオ': "/mypage/my-portfolios" }
   ]
 
   const initialName = () => {
@@ -173,12 +192,29 @@ const Mypage = (props) => {
       </List>
       <Divider />
       <List>
-        {["マイポートフォリオ", "ポートフォリオ公開"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{portfolioIcons[index]}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {portfolioRouteLists.map((text, index) => (
+          <Link to={`${Object.values(text)}`}
+            className="mypage-menu-btn" key={Object.keys(text)}>
+            <ListItem button>
+              <ListItemIcon>{portfolioIcons[index]}</ListItemIcon>
+              <ListItemText
+                primary={Object.keys(text)}
+                style={{color: "#333"}}
+              />
+            </ListItem>
+          </Link>
         ))}
+        <a href="/public" className="mypage-menu-btn">
+          <ListItem button>
+            <ListItemIcon>
+              <CloudUploadIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="ポートフォリオ公開"
+              style={{color: "#333"}}
+            />
+          </ListItem>
+        </a>
       </List>
     </div>
   );
@@ -216,6 +252,12 @@ const Mypage = (props) => {
                   </Route>
                   <Route path="/mypage/logout">
                       ログアウト
+                  </Route>
+                  <Route path="/mypage/my-portfolios">
+                      マイポートフォリオ
+                  </Route>
+                  <Route path="/mypage/my-portfolio/:id">
+                      作品プレビュー
                   </Route>
                 </Switch>
             </Typography>
@@ -259,6 +301,8 @@ const Mypage = (props) => {
             <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} avatar={getAvatar} />} />
             <Route path="/mypage/edit-mail-pass" component={() => <EditMailPass user={user} />} />
             <Route path="/mypage/logout" component={() => <Logout user={user} />} />
+            <Route path="/mypage/my-portfolios" component={() => <MyPortfolios portfolios={myPortfolios} />} />
+            <Route path="/mypage/my-portfolio/:id" component={Portfolio} />
           </Switch>
         </main>
       </div>

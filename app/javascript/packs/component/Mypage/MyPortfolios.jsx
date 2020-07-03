@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Card, CardActionArea, CardContent, CardMedia, makeStyles } from "@material-ui/core"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { Typography, Card, CardActionArea, CardMedia, CardContent, Button, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-  
+const useStyles = makeStyles(() => ({
   notImg: {
     height: "180px",
     fontSize: "3rem",
@@ -13,28 +12,38 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Portfolios = () => {
+const MyPortfolios = (props) => {
 
   const classes = useStyles();
 
   const [portfolios, setPortfolios] = useState(new Array);
-
-  useEffect(() => {
-    axios.get("/portfolios").then(response => {
-      if (response.statusText === "OK") {
-        setPortfolios(response.data);
-      }
-    })
-  }, [])
   
-  return (
-    <div className="container py-5">
-      <Typography variant="h4">新着作品</Typography>
+  useEffect(() => {
+    
+    if (props.portfolios.length) {
+      setPortfolios(props.portfolios);
+    }
+  }, [])
 
+  const EditDestroyButton = (
+    <div className="text-right" style={{ width: "100%" }}>
+      <Button variant="contained" component="div">編集</Button>
+      <Button variant="contained" component="div"
+        style={{
+          backgroundColor: "#f50057",
+          color: "white"
+        }}
+      >削除</Button>
+    </div>
+  )
+
+  return (
+    <div className="container">
+      <Typography variant="h5" className="mt-3">マイポートフォリオ一覧</Typography>
       <div className="row mt-3">
         {portfolios.map((portfolio, i) => (
           <div className="col-md-6 col-lg-4 mb-4" key={i}>
-            <Link to={`/portfolio/${portfolio.id}`} className="mypage-menu-btn">
+            <Link to={`/mypage/my-portfolio/${portfolio.id}`} className="mypage-menu-btn">
               <Card>
                 <CardActionArea>
                   {portfolio.image ?
@@ -56,18 +65,24 @@ const Portfolios = () => {
                     <Typography gutterBottom variant="h5" component="h2">
                     {portfolio.title}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                      style={{height: "2rem", overflow: "hidden"}}
+                    >
                     {portfolio.desc}
                     </Typography>
+                    {/* {EditDestroyButton} */}
                   </CardContent>
                 </CardActionArea>
               </Card>
             </Link>
           </div>
-        ))}  
+        ))}
       </div>
     </div>
   )
 }
 
-export default Portfolios
+export default MyPortfolios
