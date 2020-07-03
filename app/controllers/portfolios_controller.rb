@@ -1,22 +1,16 @@
 class PortfoliosController < ApplicationController
+  before_action :redirect_root, only: [:create, :update, :edit, :destroy]
   def index
-    portfolios = Portfolio.all.includes(:user).with_attached_image.order(created_at: :desc)
-    folios = []
-    portfolios.each do |portfolio|
-      tmp = {}
-      if portfolio.image.attached?
-        tmp[:image] = portfolio.image_url
-      end
-      tmp[:title] = portfolio.title
-      tmp[:url] = portfolio.url
-      tmp[:desc] = portfolio.desc
-      folios << tmp
+    
+    if params[:id]
+      user = User.find(params[:id])
+      folios = image_with(user.portfolios.with_attached_image)
+      render json: folios
+    else
+      portfolios = Portfolio.all.includes(:user).with_attached_image.order(created_at: :desc)
+      folios = image_with(portfolios) 
+      render json: folios
     end
-    render json: folios
-  end
-
-  def new
-    redirect_to root_path
   end
   
   def create
@@ -28,7 +22,75 @@ class PortfoliosController < ApplicationController
     end
   end
 
+  def show
+    portfolio = Portfolio.find(params[:id])
+    render json: portfolio
+  end
+
+  def edit
+    portfolio = Portfolio.find(params[:id])
+    if portfolio.user.id == current_user.id
+      render json: portfolio
+    else
+      render json: "not permit user"
+    end
+  end
+
+  def update
+    portfolio = Portfolio.find(params[:id])
+    if portfolio.user_id == current_user.id
+      if portfolio.update(portfolio_params)
+        render json: portfolio
+      else
+        render json: checkErrors(portfolio)
+      end
+    else
+      render json: "not permit user"
+    end
+  end
+
+  def destroy
+    portfolio = Portfolio.find(params[:id])
+    if portfolio.user_id == current_user.id
+      if portfolio&.destroy
+        render json: nil
+      end
+    end
+  end
+
+  def getImage
+    portfolio = Portfolio.find(params[:id])
+    if portfolio.image.attached?
+      render json: portfolio.image_url 
+    else
+      render json: nil
+    end
+  end
+  
+  private
+  
   def portfolio_params
     params.require(:portfolio).permit(:title, :url, :desc, :image).merge(user_id: current_user.id)
   end
+  
+  def image_with(portfolios)
+    portfolios.map do |portfolio|
+      tmp = {}
+      if portfolio.image.attached?
+        tmp[:image] = portfolio.image_url
+      end
+      tmp[:id] = portfolio.id
+      tmp[:title] = portfolio.title
+      tmp[:url] = portfolio.url
+      tmp[:desc] = portfolio.desc
+
+      tmp
+    end
+  end
+
+  def redirect_root
+    redirect_to root_url unless logged_in?
+  end
+
 end
+  

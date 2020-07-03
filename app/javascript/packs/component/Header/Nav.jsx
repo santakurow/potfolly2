@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles"
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
@@ -9,8 +9,10 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
 
   title: {
-    letterSpacing: theme.spacing(0.4)
+    letterSpacing: theme.spacing(0.4),
+    color: "white"
   },
+  
 }))
 
 const Nav = () => {
@@ -29,8 +31,9 @@ const Nav = () => {
   }, [])
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a href="/" className={`navbar-brand mb-0 h1 font-weight-bold ${classes.title}`}>Potfolly</a>
+    <nav className="navbar navbar-expand-lg"
+      style={{ background: "#3f51b5" }}>
+      <a href="/" className={`navbar-brand mb-0 h1 font-weight-bold logo-title ${classes.title}`}>Potfolly</a>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -48,7 +51,7 @@ const Nav = () => {
               </li>
               <li className="nav-item">
                 <Button>
-                  <Link to="/signup" className="nav-link">新規登録</Link>
+                  <NavLink to="/signup" className="nav-link">新規登録</NavLink>
                 </Button>
               </li>
             </>
@@ -56,12 +59,12 @@ const Nav = () => {
             <>
               <li className="nav-item">
                 <Button>
-                  <Link to="/public" className="nav-link">公開する</Link>
+                  <NavLink to="/public" className="nav-link" style={{color: "white"}}>公開する</NavLink>
                 </Button>
               </li>
               <li className="nav-item">
                 <Button>
-                  <Link to="/mypage/" className="nav-link">マイページ</Link>
+                  <NavLink to="/mypage/" className="nav-link" style={{color: "white"}}>マイページ</NavLink>
                 </Button>
               </li>
             </>

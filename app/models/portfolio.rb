@@ -5,8 +5,7 @@ class Portfolio < ApplicationRecord
 
   VALID_URL_REGEX = /\A#{URI::regexp(%w(http https))}\z/
 
-  validates :url, presence: true, 
-  format: {with: VALID_URL_REGEX}
+  validates :url, presence: true, format: {with: VALID_URL_REGEX}
 
   belongs_to :user
 

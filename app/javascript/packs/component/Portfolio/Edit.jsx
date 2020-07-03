@@ -31,8 +31,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Public = () => {
+const Edit = (props) => {
   const classes = useStyles();
+
+  const [onUploaded, setOnUploaded] = useState(false);
+  const [getUploadedImage, setUploadedImage] = useState("");
 
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -48,6 +51,38 @@ const Public = () => {
   const [isSelect, setIsSelect] = useState(false);
 
   const [isDisable, setIsDisable] = useState(false);
+
+  useEffect(() => {
+    axios.get(`/portfolio/${props.match.params.id}/edit`)
+      .then(response => {
+        if (response.statusText === "OK") {
+          if (response.data !== "not permit user") {
+            console.log(response.data);
+            setTitle(response.data.title);
+            setUrl(response.data.url);
+            setDesc(response.data.desc);
+            requestImage(response.data.id);
+          }
+          else {
+            location.href = "/";
+          }
+        }
+      })
+    console.log(props);
+  }, [])
+
+  const requestImage = (portfolio_id) => {
+    axios.get(`/portfolio/${portfolio_id}/getImage`)
+      .then(response => {
+        if (response.statusText === "OK") {
+          console.log(response.data);
+          if (response.data !== null) {
+            setUploadedImage(response.data);
+            setOnUploaded(true);
+          }
+      }
+    })
+  }
 
   const resetErrors = (attributes) => {
     const attrs = attributes;
@@ -69,8 +104,9 @@ const Public = () => {
     data.append("portfolio[title]", title);
     data.append("portfolio[url]", url);
     data.append("portfolio[desc]", desc);
-    
-    const Url = "/portfolio";
+
+    const Url = `/portfolio/${props.match.params.id}`;
+
     const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const config = {
       headers: {
@@ -78,7 +114,7 @@ const Public = () => {
         "Content-Type": "application/json"
       }
     }
-    axios.post(Url, data, config)
+    axios.patch(Url, data, config)
       .then(response => {
         if (response.statusText === "OK") {
           return response.data
@@ -106,7 +142,7 @@ const Public = () => {
           })
         }
         else {
-          location.href = "/"
+          location.href = "/";
         }
       }).catch(error => console.log(error));
   }
@@ -128,12 +164,16 @@ const Public = () => {
 
   return (
     <div className={`container ${classes.root} text-center`}>
-      <Typography variant="h4" className="text-center">ポートフォリオの公開</Typography>
+      <Typography variant="h4" className="text-center">ポートフォリオの編集</Typography>
       <form onSubmit={handleSubmit} noValidate autoComplete="off" className="my-5">
         <div className="form-group">
-          {isSelect ?
+          {isSelect || onUploaded ?
             <Paper variant="outlined" className={classes.preview}>
-              <img src="" id="output" className={classes.upImg} />
+              {onUploaded ?
+                <img src={getUploadedImage} id="output" className={classes.upImg} />
+                :
+                <img src="" id="output" className={classes.upImg} />
+              }
             </Paper>
             :
             <Paper variant="outlined" className={classes.preview}
@@ -142,8 +182,15 @@ const Public = () => {
               <Typography variant="h5">作品の画像を選択してください。</Typography>
             </Paper>
           }
-          <input type="file" id="preview" style={{display: "none"}} onChange={handleSelectImage} accept="image/*" />
+          <input type="file" id="preview" style={{ display: "none" }} onChange={handleSelectImage} accept="image/*" />
         </div>
+        {isSelect || onUploaded ?
+          <div className="form-group">
+            <Button variant="contained" component="label" htmlFor="preview" style={{ margin: "10px auto" }}>変更</Button>
+          </div>
+          :
+          <></>
+        }
         <div className="form-group">
           <TextField
             id="title"
@@ -154,6 +201,7 @@ const Public = () => {
             error={isTitleError}
             helperText={titleErrorMessage}
             onChange={e => setTitle(e.target.value)}
+            value={title}
           />
         </div>
         <div className="form-group">
@@ -167,6 +215,7 @@ const Public = () => {
             error={isUrlError}
             helperText={urlErrorMessage}
             onChange={e => setUrl(e.target.value)}
+            value={url}
           />
         </div>
         <div className="form-group">
@@ -181,12 +230,13 @@ const Public = () => {
             multiline
             rows={4}
             onChange={e => setDesc(e.target.value)}
+            value={desc}
           />
         </div>
-        <Button variant="contained" type="submit" color="primary" disabled={isDisable}>公開</Button>
+        <Button variant="contained" type="submit" color="primary" disabled={isDisable}>編集</Button>
       </form>
     </div>
   )
 }
 
-export default Public
+export default Edit
