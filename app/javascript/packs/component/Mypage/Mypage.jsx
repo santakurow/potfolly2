@@ -30,7 +30,7 @@ import { useEffect, useState } from 'react';
 
 import Profile from "./Profile";
 import UploadAvatar from "./Upload-Avatar";
-import EditMailPass from "./Edit-Mail-Pass";
+import ResetPassword from "./ResetPassword";
 import Logout from "./Logout";
 import MyPortfolios from "./MyPortfolios";
 import Portfolio from "../Portfolio/Portfolio"
@@ -88,17 +88,21 @@ const Mypage = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
+  // string型のデータはデフォルトでnull値(undefinedとして表示されてしまう)のため空文字を設定
+  const setEmpty = (response) => {
+    for (const key in response.data) {
+      if (!response.data[key]) {
+        response.data[key] = "";
+      }
+    }
+  }
 
   useEffect(() => {
-    axios.get("/sessions/restore")
+    axios.get("/sessions/getCurrentUser")
       .then(response => {
         if (response.statusText === "OK") {
-          // string型のデータはデフォルトでnull値(undefinedとして表示されてしまう)のため空文字を設定
-          for (const key in response.data) {
-            if (!response.data[key]) {
-              response.data[key] = "";
-            }
-          }
+          
+          setEmpty(response);
           return response.data;
         }
       })
@@ -247,7 +251,7 @@ const Mypage = (props) => {
                   <Route path="/mypage/upload-avatar">
                       写真
                   </Route>
-                  <Route path="/mypage/edit-mail-pass">
+                  <Route path="/mypage/reset-password">
                       パスワード変更
                   </Route>
                   <Route path="/mypage/logout">
@@ -299,7 +303,7 @@ const Mypage = (props) => {
             <Route path="/mypage" exact component={() => <Profile user={user} />} />
             <Route path="/mypage/profile" component={() => <Profile user={user} />} />
             <Route path="/mypage/upload-avatar" component={() => <UploadAvatar user={user} avatar={getAvatar} />} />
-            <Route path="/mypage/edit-mail-pass" component={() => <EditMailPass user={user} />} />
+            <Route path="/mypage/reset-password" component={() => <ResetPassword user={user} />} />
             <Route path="/mypage/logout" component={() => <Logout user={user} />} />
             <Route path="/mypage/my-portfolios" component={() => <MyPortfolios portfolios={myPortfolios} />} />
             <Route path="/mypage/my-portfolio/:id" component={Portfolio} />

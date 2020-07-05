@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
 
 const Home = () => {
   const [logged_in, setLog] = useState(false);
-  const url = "/sessions/restore"
+  const url = "/sessions/getCurrentUser"
 
   useEffect(() => {
     axios.get(url).then(res => {

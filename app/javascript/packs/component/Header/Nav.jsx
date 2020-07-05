@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles"
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
+import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import axios from "axios";
 
@@ -21,7 +22,7 @@ const Nav = () => {
   const [current_user, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const url = "/sessions/restore";
+    const url = "/sessions/getCurrentUser";
     axios.get(url).then(response => {
       if (response.statusText === "OK") {
         setCurrentUser(response.data);
@@ -50,9 +51,7 @@ const Nav = () => {
                 <Login />
               </li>
               <li className="nav-item">
-                <Button>
-                  <NavLink to="/signup" className="nav-link">新規登録</NavLink>
-                </Button>
+                <Signup />
               </li>
             </>
             :

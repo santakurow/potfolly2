@@ -1,5 +1,4 @@
 class PasswordResetsController < ApplicationController
-  # before_update 
 
   def create
     user = User.find(params[:id])
@@ -12,7 +11,7 @@ class PasswordResetsController < ApplicationController
         user.update_attribute(:reset_digest, nil)
         render json: user
       else
-        render json: checkErrors(user)
+        render json: getErrors(user)
       end
 
     else

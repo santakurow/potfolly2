@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Typography, Paper, Button } from '@material-ui/core';
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
 import { makeStyles } from "@material-ui/core/styles";
@@ -102,7 +102,7 @@ const UploadAvatar = (props) => {
                 style={{
                   cursor: "pointer", width: "100%",
                   textAlign: "center", margin: "10px 0",
-                  // height: "235px"
+                 
                 }}
               >
                 <CameraAltIcon className={classes.cameraIcon} />

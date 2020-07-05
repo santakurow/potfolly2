@@ -1,5 +1,5 @@
 class PortfoliosController < ApplicationController
-  before_action :redirect_root, only: [:create, :update, :edit, :destroy]
+  # before_action :redirect_root, only: [:create, :update, :edit, :destroy]
   def index
     
     if params[:id]
@@ -18,7 +18,7 @@ class PortfoliosController < ApplicationController
     if portfolio.save
       render json: portfolio
     else
-      render json: checkErrors(portfolio)
+      render json: getErrors(portfolio)
     end
   end
 
@@ -42,7 +42,7 @@ class PortfoliosController < ApplicationController
       if portfolio.update(portfolio_params)
         render json: portfolio
       else
-        render json: checkErrors(portfolio)
+        render json: getErrors(portfolio)
       end
     else
       render json: "not permit user"
@@ -88,9 +88,9 @@ class PortfoliosController < ApplicationController
     end
   end
 
-  def redirect_root
-    redirect_to root_url unless logged_in?
-  end
+  # def redirect_root
+  #   redirect_to root_url unless logged_in?
+  # end
 
 end
   

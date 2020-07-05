@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Typography, FormControl, InputLabel, FormHelperText, Input } from '@material-ui/core';
-import { Link } from "react-router-dom"
+import { Button, Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
-import axios from "axios";
+import API from "../../api"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = () => {
   const classes = useStyles();
-
+  const [open, setOpen] = useState(false);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,11 +26,20 @@ const Signup = () => {
   const [isNicknameError, setIsNicknameError] = useState(false);
   const [isEmailError, setIsEmailError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
-  const [nicknameErrorMessage, setNicknameErrorMessage] = useState("");
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [nicknameErrorMessage, setNicknameErrorMessage] = useState(new Array);
+  const [emailErrorMessage, setEmailErrorMessage] = useState(new Array);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(new Array);
 
   const [isDisable, setIsDisable] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+    setErrors("");
+  }
 
   const resetErrors = () => {
     setIsNicknameError(false);
@@ -42,6 +50,7 @@ const Signup = () => {
     setPasswordErrorMessage("");
     
   }
+
   
   useEffect(() => {
 
@@ -54,7 +63,6 @@ const Signup = () => {
           case "nickname":
             setIsNicknameError(true);
             setNicknameErrorMessage(errors["nickname"]);
-            console.log(errors["nickname"]);
             break;
           case "email":
             setIsEmailError(true);
@@ -69,12 +77,11 @@ const Signup = () => {
     }
   })
 
-  const handleSubmit = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
     setIsDisable(true);
 
     const url = "/users";
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content")
     const data = {
       user: {
         nickname: nickname,
@@ -83,14 +90,7 @@ const Signup = () => {
         password: password_confirmation
       }
     };
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    };
-
-    axios.post(url, data, config)
+    API.post(url, data)
       .then(response => {
         if (response.statusText === "OK") {
           
@@ -110,86 +110,86 @@ const Signup = () => {
       .catch(error => console.log(error));
   }
 
+  const errorMessageList = (error_msg) => {
+    if (error_msg) {
+      const e = error_msg.map((msg, i) => (
+        <li key={i}>{msg}</li>
+      ))
+      return e;
+    }
+  }
+
   return (
-    <div className={`container text-center ${classes.root}`}>
-      <Typography variant="h4">ユーザー登録</Typography>
-      <form onSubmit={handleSubmit} noValidate autoComplete="off">
-        <div className="form-group">
-          <FormControl error={isNicknameError} >
-            <InputLabel htmlFor="nickname">ニックネーム</InputLabel>
-            <Input
-              id="nickname"
-              className={`${classes.formFiled}`}
+    <div>
+      <Button onClick={handleOpen}>
+        <a href="/signup" className="nav-link"
+          role="button"
+          onClick={e => e.preventDefault()}
+          style={{color: "white"}}
+        >ユーザー登録</a>
+      </Button>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-title" className="text-center">
+        <DialogTitle id="form-title">ユーザー登録</DialogTitle>
+        <form className="mx-3" onSubmit={handleSignup}>
+          <div className="form-group">
+            <TextField
+              error={isNicknameError}
+              helperText={errorMessageList(nicknameErrorMessage)}
+              label="ニックネーム"
               type="text"
               name="nickname"
-              onChange={e => { setNickname(e.target.value) }}
-              aria-describedby="nickname-text"
+              className={classes.formFiled}
+              onChange={e => setNickname(e.target.value)}
+              
             />
-            <FormHelperText id="nickname-text">{Object.values(nicknameErrorMessage).map(msg => (
-              <li key={msg}>{msg}</li>
-            ))}</FormHelperText>
-          </FormControl>
-        </div>
-        <div className="form-group">
-          <FormControl error={isEmailError}>
-            <InputLabel htmlFor="email">メールアドレス</InputLabel>
-            <Input
-              id="email"
-              className={`${classes.formFiled}`}
+          </div>
+          <div className="form-group mb-3">
+            <TextField
+              error={isEmailError}
+              helperText={errorMessageList(emailErrorMessage)}
+              label="メールアドレス"
               type="email"
               name="email"
-              onChange={e => { setEmail(e.target.value) }}
-              aria-describedby="email-text"
-            />
-            <FormHelperText id="email-text">{Object.values(emailErrorMessage).map(msg => (
-              <li key={msg}>{msg}</li>
-            ))}
-            </FormHelperText>
-          </FormControl>
-        </div>
-        <div className="form-group">
-          <FormControl error={isPasswordError}>
-            <InputLabel htmlFor="password">パスワード(６文字以上)</InputLabel>
-            <Input
-              id="password"
-              className={`${classes.formFiled}`}
+              className={classes.formFiled}
+              onChange={e => setEmail(e.target.value)}
+              />
+          </div>
+          <div className="form-group mb-3">
+            <TextField
+              error={isPasswordError}
+              helperText={errorMessageList(passwordErrorMessage)}
+              label="パスワード（6文字以上）"
               type="password"
               name="password"
-              onChange={e => { setPassword(e.target.value) }}
-              aria-describedby="password-text"
-              autoComplete="new-password"
-            />
-            <FormHelperText id="password-text">{Object.values(passwordErrorMessage).map((msg, i) => (
-              <li key={i}>{msg}</li>
-            ))}</FormHelperText>
-          </FormControl>
-        </div>
-        <div className="form-group">
-          <FormControl error={isPasswordError}>
-            <InputLabel htmlFor="password-confirmation">パスワード(確認)</InputLabel>
-            <Input
-              id="password-confirmation"
-              className={`${classes.formFiled}`}
+              className={classes.formFiled}
+              onChange={e => setPassword(e.target.value)}
+              />
+          </div>
+          <div className="form-group mb-3">
+            <TextField
+              error={isPasswordError}
+              label="パスワード（確認）"
               type="password"
               name="password_confirmation"
-              onChange={e => { setPasswordConfirmation(e.target.value) }}
-              aria-describedby="password-confirmation-text"
-            />
-            <FormHelperText id="password-confirmation-text">{Object.values(passwordErrorMessage).map((msg, i) => (
-              <li key={i}>{msg}</li>
-            ))}</FormHelperText>
-          </FormControl>
-        </div>
-        <Button
-          variant="contained"
-          type="submit"
-          color="primary"
-          disabled={isDisable}
-        >
-          登録
-          </Button>
-      </form>
-      <Link to="/" className="mt-2">戻る</Link>
+              className={classes.formFiled}
+              onChange={e => setPasswordConfirmation(e.target.value)}
+              />
+          </div>
+          <DialogActions>
+            <Button onClick={handleClose}>
+              キャンセル
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              disabled={isDisable}
+            >
+              登録
+              </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </div>
   )
 }

@@ -17,9 +17,8 @@ RSpec.describe "Sessions", type: :request do
         email: @user.email,
         password: @user.password
       }}
-
-      expect(response).to have_http_status(200)
       expect(response.content_type).to eq "application/json; charset=utf-8"
+      expect(response).to have_http_status(200)
       expect(logged_in?).to eq true
     end
 

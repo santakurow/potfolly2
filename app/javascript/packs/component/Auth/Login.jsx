@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from 'react';
 import { Dialog, Button, DialogTitle, DialogActions, TextField } from '@material-ui/core';
 import Alert from "@material-ui/lab/Alert";
-import axios from "axios";
+import API from "../../api"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,26 +31,20 @@ const Login = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setError("");
   }
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsDisable(true);
     const url = "/sessions"
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const data = {
       session: {
         email: email,
         password: password
       }
     };
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-    axios.post(url, data, config)
+    API.post(url, data)
       .then(response => {
         if (response.statusText === "OK") {
           return response.data
@@ -73,7 +67,11 @@ const Login = () => {
   return (
     <div>
       <Button onClick={handleOpen}>
-        <a href="/login" className="nav-link" role="button" onClick={e => e.preventDefault()}>ログイン</a>
+        <a href="/login" className="nav-link"
+          role="button"
+          onClick={e => e.preventDefault()}
+          style={{color: "white"}}
+        >ログイン</a>
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-title" className="text-center">
         <DialogTitle id="form-title">ログイン</DialogTitle>

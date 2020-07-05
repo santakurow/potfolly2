@@ -10,8 +10,12 @@ class SessionsController < ApplicationController
     end
   end
 
-  def restore
+  def getCurrentUser
     render json: current_user
+  end
+
+  def getLoggedIn
+    render json: logged_in?
   end
 
   def destroy

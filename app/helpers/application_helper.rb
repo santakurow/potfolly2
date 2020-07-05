@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def checkErrors(object)
+  def getErrors(object)
     object.errors.messages.merge(error: true)
   end
 end

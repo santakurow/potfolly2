@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       login user
       render json: user
     else
-      render json: checkErrors(user)
+      render json: getErrors(user)
     end
   end
 
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user
     else
-      render json: checkErrors(@user)
+      render json: getErrors(@user)
     end
   end
 

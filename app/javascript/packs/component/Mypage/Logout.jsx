@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Typography, Button } from '@material-ui/core'
-import axios from "axios"
+// import axios from "axios"
+import API from "../../api"
 
 
 const Logout = (props) => {
@@ -10,14 +11,14 @@ const Logout = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
   
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content"); 
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-    axios.delete(`/sessions/${props.user.id}`, config)
+    // const token = document.querySelector("meta[name='csrf-token']").getAttribute("content"); 
+    // const config = {
+    //   headers: {
+    //     "X-CSRF-Token": token,
+    //     "Content-Type": "application/json"
+    //   }
+    // }
+    API.delete(`/sessions/${props.user.id}`)
       .then(res => {
         if (res.statusText === "OK") {
           setIsDisable(true);

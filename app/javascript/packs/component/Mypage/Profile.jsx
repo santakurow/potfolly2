@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Typography, TextField, Button } from '@material-ui/core'
-import axios from "axios"
+import API from "../../api"
 
 const Profile = (props) => {
 
@@ -35,17 +35,11 @@ const Profile = (props) => {
         pr: user.pr,
       }
     }
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-    axios.patch(url, data, config)
+
+    API.patch(url, data)
       .then(response => {
         if (response.statusText === "OK") {
-          // console.log(response.data);
+          
           if (response.data.error) {
             setIsDisable(false);
             const errors = response.data;

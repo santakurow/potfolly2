@@ -17,7 +17,8 @@ Rails.application.routes.draw do
   
   post '/sessions', to: "sessions#create"
   delete '/sessions/:id', to: "sessions#destroy"
-  get '/sessions/restore', to: "sessions#restore"
+  get '/sessions/getCurrentUser', to: "sessions#getCurrentUser"
+  get '/sessions/getLoggedIn', to: "sessions#getLoggedIn"
 
   get '/portfolios', to: "portfolios#index"
   get '/myportfolio/:id', to: "portfolios#index"

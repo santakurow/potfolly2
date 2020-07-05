@@ -4,6 +4,7 @@ import Categories from "../Category/Categories"
 import { Paper, Typography, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import axios from "axios"
+import API from "../../api"
 import { Link } from 'react-router-dom'
 
 const useStyle = makeStyles(() => ({
@@ -35,6 +36,7 @@ const Portfolio = (props) => {
     axios.get(`/portfolio/${id}/detail`)
       .then(response => {
         if (response.statusText === "OK") {
+          console.log(response.data);
           setPortfolio(response.data);
           requestImage(response.data.id);
           requestUser(response.data.user_id);
@@ -62,9 +64,8 @@ const Portfolio = (props) => {
   }
 
   const requestCurrentUser = () => {
-    axios.get(`/sessions/restore`).then(response => {
+    axios.get(`/sessions/getCurrentUser`).then(response => {
       if (response.statusText === "OK") {
-        // console.log(response.data);
         setCurrentUser(response.data);
       }
     })
@@ -72,14 +73,7 @@ const Portfolio = (props) => {
 
   const handleDelete = () => {
     const url = `/portfolio/${getPortfolio.id}`;
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-    axios.delete(url, config).then(response => {
+    API.delete(url).then(response => {
       if (response.statusText === "OK") {
         if (response.data === null) {
           location.href = "/";
@@ -115,7 +109,7 @@ const Portfolio = (props) => {
             {getPortfolio.desc}
           </Typography>
         </div>
-        {getCurrentUser.id === getUser.id ?
+        {(getCurrentUser && getCurrentUser.id) === getUser.id ?
           <div className="col-md-12 col-lg-6">
             {props.match.url === `/mypage/my-portfolio/${props.match.params.id}` ?
               <a href={`/my-portfolio/${getPortfolio.id}/edit`} className="mypage-menu-btn">

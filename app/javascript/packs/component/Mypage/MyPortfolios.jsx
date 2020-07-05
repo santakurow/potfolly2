@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
-import axios from "axios"
+// import axios from "axios"
 import { Typography, Card, CardActionArea, CardMedia, CardContent, Button, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
@@ -25,17 +25,17 @@ const MyPortfolios = (props) => {
     }
   }, [])
 
-  const EditDestroyButton = (
-    <div className="text-right" style={{ width: "100%" }}>
-      <Button variant="contained" component="div">編集</Button>
-      <Button variant="contained" component="div"
-        style={{
-          backgroundColor: "#f50057",
-          color: "white"
-        }}
-      >削除</Button>
-    </div>
-  )
+  // const EditDestroyButton = (
+  //   <div className="text-right" style={{ width: "100%" }}>
+  //     <Button variant="contained" component="div">編集</Button>
+  //     <Button variant="contained" component="div"
+  //       style={{
+  //         backgroundColor: "#f50057",
+  //         color: "white"
+  //       }}
+  //     >削除</Button>
+  //   </div>
+  // )
 
   return (
     <div className="container">

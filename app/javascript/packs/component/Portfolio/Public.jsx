@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Typography, Button, TextField, Paper } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
-import axios from 'axios';
+import API from "../../api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,14 +71,8 @@ const Public = () => {
     data.append("portfolio[desc]", desc);
     
     const Url = "/portfolio";
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-    axios.post(Url, data, config)
+    
+    API.post(Url, data)
       .then(response => {
         if (response.statusText === "OK") {
           return response.data
@@ -132,9 +126,12 @@ const Public = () => {
       <form onSubmit={handleSubmit} noValidate autoComplete="off" className="my-5">
         <div className="form-group">
           {isSelect ?
-            <Paper variant="outlined" className={classes.preview}>
-              <img src="" id="output" className={classes.upImg} />
-            </Paper>
+            <>
+              <Paper variant="outlined" className={classes.preview}>
+                <img src="" id="output" className={classes.upImg} />
+              </Paper>
+                <Button variant="contained" component="label" htmlFor="preview" style={{ margin: "10px auto" }}>変更</Button>
+            </>
             :
             <Paper variant="outlined" className={classes.preview}
               component="label" htmlFor="preview" style={{cursor: "pointer"}}>

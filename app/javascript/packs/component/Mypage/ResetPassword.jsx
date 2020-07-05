@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Typography, TextField, Button } from '@material-ui/core'
-import axios from "axios";
+// import axios from "axios";
+import API from "../../api"
 
-const EditMailPass = (props) => {
+const ResetPassword = (props) => {
   const [password, setPassword] = useState(props.user.password);
   const [reset_password, setResetPassword] = useState("");
   const [reset_password_confirmation, setResetPasswordConfirmation] = useState("");
@@ -44,7 +45,6 @@ const EditMailPass = (props) => {
 
     setIsDisable(true);
 
-    const token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     const data = {
       user: {
         password: password,
@@ -53,14 +53,7 @@ const EditMailPass = (props) => {
       }
     }
 
-    const config = {
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json"
-      }
-    }
-
-    axios.post(`/resets/${props.user.id}`, data, config)
+    API.post(`/resets/${props.user.id}`, data)
       .then(res => {
         if (res.statusText === "OK") {
           if (res.data.error) {
@@ -168,4 +161,4 @@ const EditMailPass = (props) => {
   )
 }
 
-export default EditMailPass
+export default ResetPassword
