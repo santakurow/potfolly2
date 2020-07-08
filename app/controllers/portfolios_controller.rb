@@ -7,7 +7,7 @@ class PortfoliosController < ApplicationController
       folios = image_with(user.portfolios.with_attached_image)
       render json: folios
     else
-      portfolios = Portfolio.all.includes(:user).with_attached_image.order(created_at: :desc)
+      portfolios = Portfolio.all.includes(:user, :category).with_attached_image.order(created_at: :desc)
       folios = image_with(portfolios) 
       render json: folios
     end
@@ -66,11 +66,23 @@ class PortfoliosController < ApplicationController
       render json: nil
     end
   end
+
+  def getCategory
+    portfolios = Portfolio.where(category_id: params[:id]).includes(:user, :category).with_attached_image.order(created_at: :desc)
+    folios = image_with(portfolios) 
+    render json: folios
+  end
+
+  def search
+    portfolios = Portfolio.where("title LIKE ?", "%#{params[:q]}%").includes(:user, :category).with_attached_image.order(created_at: :desc)
+    folios = image_with(portfolios)
+    render json: folios
+  end
   
   private
   
   def portfolio_params
-    params.require(:portfolio).permit(:title, :url, :desc, :image).merge(user_id: current_user.id)
+    params.require(:portfolio).permit(:title, :url, :desc, :image, :category_id).merge(user_id: current_user.id)
   end
   
   def image_with(portfolios)

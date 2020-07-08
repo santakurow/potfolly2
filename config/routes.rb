@@ -22,13 +22,15 @@ Rails.application.routes.draw do
 
   get '/portfolios', to: "portfolios#index"
   get '/myportfolio/:id', to: "portfolios#index"
+  get '/portfolios/category/:id', to: "portfolios#getCategory"
   get '/portfolio/:id/detail', to: "portfolios#show"
   get '/portfolio/:id/edit', to: "portfolios#edit"
   get '/portfolio/:id/getImage', to: "portfolios#getImage"
   post '/portfolio', to: "portfolios#create"
   patch '/portfolio/:id', to: "portfolios#update"
   delete '/portfolio/:id', to: "portfolios#destroy"
-
+  
+  get '/search/:q', to: "portfolios#search"
 
   avoid_react_routes ["/signup", "/public", "/mypage", "/mypage/*path", "/portfolios/*path", "/portfolio/*path", "/my-portfolio/*path"]
 

@@ -151,7 +151,7 @@ const Mypage = (props) => {
   const menuRouteLists = [
     { 'プロフィール': "/profile" },
     { '写真': "/upload-avatar"},
-    { 'パスワード': "/edit-mail-pass"},
+    { 'パスワード': "/reset-password"},
     { 'ログアウト': "/logout" }
   ]
 

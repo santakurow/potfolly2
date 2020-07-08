@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
 const Public = () => {
   const classes = useStyles();
 
+  const [category, setCategory] = useState(1);
+
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [url, setUrl] = useState("");
@@ -41,6 +43,7 @@ const Public = () => {
   const [isTitleError, setIsTitleError] = useState(false);
   const [isDescError, setIsDescError] = useState(false);
   const [isUrlError, setIsUrlError] = useState(false);
+
   const [titleErrorMessage, setTitleErrorMessage] = useState("");
   const [descErrorMessage, setDescErrorMessage] = useState("");
   const [urlErrorMessage, setUrlErrorMessage] = useState("");
@@ -69,6 +72,7 @@ const Public = () => {
     data.append("portfolio[title]", title);
     data.append("portfolio[url]", url);
     data.append("portfolio[desc]", desc);
+    data.append("portfolio[category_id]", category);
     
     const Url = "/portfolio";
     
@@ -120,6 +124,37 @@ const Public = () => {
     }
   }
 
+  const currencies = [
+    {
+      value: 1,
+      label: "Web開発"
+    },
+    {
+      value: 2,
+      label: "モバイルアプリ"
+    },
+    {
+      value: 3,
+      label: "データサイエンス"
+    },
+    {
+      value: 4,
+      label: "ゲーム開発"
+    },
+    {
+      value: 5,
+      label: "デザイン"
+    },
+    {
+      value: 6,
+      label: "グラフィック"
+    },
+    {
+      value: 7,
+      label: "3D・アニメーション"
+    }
+  ]
+
   return (
     <div className={`container ${classes.root} text-center`}>
       <Typography variant="h4" className="text-center">ポートフォリオの公開</Typography>
@@ -165,6 +200,26 @@ const Public = () => {
             helperText={urlErrorMessage}
             onChange={e => setUrl(e.target.value)}
           />
+        </div>
+        <div className="form-group">
+          <TextField
+            id="category"
+            select
+            className={`${classes.formFiled}`}
+            label="カテゴリ"
+            value={category}
+            variant="outlined"
+            SelectProps={{
+              native: true,
+            }}
+            onChange={e => setCategory(e.target.value)}
+          >
+          {currencies.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+          </TextField>
         </div>
         <div className="form-group">
           <TextField
