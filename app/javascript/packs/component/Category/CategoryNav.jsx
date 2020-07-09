@@ -43,6 +43,13 @@ const Categories = () => {
     <EmojiNature />
   ];
 
+  const deleteFlashMessage = () => {
+    const flash_msg = document.getElementById("flash-msg");
+    if (flash_msg) {
+      flash_msg.style.display = "none";
+    }
+  }
+
   return (
     <div className={classes.root} id="category">
       {categories.map((category, i) => (
@@ -52,7 +59,9 @@ const Categories = () => {
               to={`/portfolios/${Object.values(category)}`}
               color="inherit"
               underline="none"
-              className="linkhover-style">
+              className="linkhover-style"
+              onClick={deleteFlashMessage}
+            >
               {category_icons[i]}
               {Object.keys(category)}
             </Link>

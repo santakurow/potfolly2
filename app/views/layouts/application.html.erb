@@ -13,6 +13,13 @@
   </head>
 
   <body>
+    <% flash.each do |type, msg| %>
+      <% if current_page?("/mypage/profile") || current_page?("/mypage/reset-password") %>
+        <div class="alert alert-<%= type %> mb-0 flash-msg" id="flash-msg"><%= msg %></div>
+      <% else %>
+        <div class="alert alert-<%= type %> mb-0" id="flash-msg"><%= msg %></div>
+      <% end %>
+    <% end %>
     <%= yield %>
   </body>
 </html>

@@ -16,11 +16,18 @@ const PortfoliosList = (props) => {
     })
   }, [])
 
+  const deleteFlashMessage = () => {
+    const flash_msg = document.getElementById("flash-msg");
+    if (flash_msg) {
+      flash_msg.style.display = "none";
+    }
+  }
+
   return (
     <div className="row mt-3">
       {portfolios.map((portfolio, i) => (
         <div className="col-md-6 col-lg-4 mb-4" key={i}>
-          <Link to={`/portfolio/${portfolio.id}`} className="mypage-menu-btn">
+          <Link to={`/portfolio/${portfolio.id}`} className="mypage-menu-btn" onClick={deleteFlashMessage}>
             <Card>
               <CardActionArea style={{background: "#f0f0f0"}}>
                 {portfolio.image ?

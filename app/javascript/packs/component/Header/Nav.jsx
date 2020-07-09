@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles"
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
@@ -21,7 +21,6 @@ const Nav = () => {
 
   const [current_user, setCurrentUser] = useState(null);
   const [keyword, setKeyword] = useState("");
-  const history = useHistory();
 
   useEffect(() => {
     const url = "/sessions/getCurrentUser";
@@ -36,8 +35,14 @@ const Nav = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (keyword && keyword.trim()) {
-      // history.push(`/portfolios/search?${keyword}`);
       location.href = `/portfolios/search?${keyword}`;
+    }
+  }
+
+  const deleteFlashMessage = () => {
+    const flash_msg = document.getElementById("flash-msg");
+    if (flash_msg) {
+      flash_msg.style.display = "none";
     }
   }
 
@@ -74,12 +79,12 @@ const Nav = () => {
             <>
               <li className="nav-item">
                 <Button>
-                  <Link to="/public" className="nav-link" style={{color: "white"}}>公開する</Link>
+                  <Link to="/public" className="nav-link" style={{color: "white"}} onClick={deleteFlashMessage}>公開する</Link>
                 </Button>
               </li>
               <li className="nav-item">
                 <Button>
-                  <Link to="/mypage/" className="nav-link" style={{color: "white"}}>マイページ</Link>
+                  <Link to="/mypage/" className="nav-link" style={{color: "white"}} onClick={deleteFlashMessage}>マイページ</Link>
                 </Button>
               </li>
             </>

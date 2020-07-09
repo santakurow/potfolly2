@@ -25,18 +25,6 @@ const MyPortfolios = (props) => {
     }
   }, [])
 
-  // const EditDestroyButton = (
-  //   <div className="text-right" style={{ width: "100%" }}>
-  //     <Button variant="contained" component="div">編集</Button>
-  //     <Button variant="contained" component="div"
-  //       style={{
-  //         backgroundColor: "#f50057",
-  //         color: "white"
-  //       }}
-  //     >削除</Button>
-  //   </div>
-  // )
-
   return (
     <div className="container">
       <Typography variant="h5" className="mt-3">マイポートフォリオ一覧</Typography>
@@ -73,7 +61,6 @@ const MyPortfolios = (props) => {
                     >
                     {portfolio.desc}
                     </Typography>
-                    {/* {EditDestroyButton} */}
                   </CardContent>
                 </CardActionArea>
               </Card>

@@ -1,5 +1,4 @@
 class PortfoliosController < ApplicationController
-  # before_action :redirect_root, only: [:create, :update, :edit, :destroy]
   def index
     
     if params[:id]
@@ -16,6 +15,7 @@ class PortfoliosController < ApplicationController
   def create
     portfolio = Portfolio.new(portfolio_params)
     if portfolio.save
+      flash[:success] = "ポートフォリオを公開しました。"
       render json: portfolio
     else
       render json: getErrors(portfolio)
@@ -40,6 +40,7 @@ class PortfoliosController < ApplicationController
     portfolio = Portfolio.find(params[:id])
     if portfolio.user_id == current_user.id
       if portfolio.update(portfolio_params)
+        flash[:success] = "ポートフォリオを更新しました。"
         render json: portfolio
       else
         render json: getErrors(portfolio)
@@ -53,6 +54,7 @@ class PortfoliosController < ApplicationController
     portfolio = Portfolio.find(params[:id])
     if portfolio.user_id == current_user.id
       if portfolio&.destroy
+        flash[:success] = "ポートフォリオを削除しました。"
         render json: nil
       end
     end
@@ -99,10 +101,6 @@ class PortfoliosController < ApplicationController
       tmp
     end
   end
-
-  # def redirect_root
-  #   redirect_to root_url unless logged_in?
-  # end
 
 end
   

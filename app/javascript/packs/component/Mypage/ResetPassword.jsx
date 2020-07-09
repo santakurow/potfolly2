@@ -79,7 +79,7 @@ const ResetPassword = (props) => {
           }
           else {
             
-            location.href = "/mypage/edit-mail-pass"
+            location.href = "/mypage/reset-password"
           }
         }
         
