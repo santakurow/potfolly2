@@ -1,5 +1,4 @@
 class PortfoliosController < ApplicationController
-  # before_action :redirect_root, only: [:create, :update, :edit, :destroy]
   def index
     
     if params[:id]
@@ -7,7 +6,7 @@ class PortfoliosController < ApplicationController
       folios = image_with(user.portfolios.with_attached_image)
       render json: folios
     else
-      portfolios = Portfolio.all.includes(:user).with_attached_image.order(created_at: :desc)
+      portfolios = Portfolio.all.includes(:user, :category).with_attached_image.order(created_at: :desc)
       folios = image_with(portfolios) 
       render json: folios
     end
@@ -16,6 +15,7 @@ class PortfoliosController < ApplicationController
   def create
     portfolio = Portfolio.new(portfolio_params)
     if portfolio.save
+      flash[:success] = "ポートフォリオを公開しました。"
       render json: portfolio
     else
       render json: getErrors(portfolio)
@@ -40,6 +40,7 @@ class PortfoliosController < ApplicationController
     portfolio = Portfolio.find(params[:id])
     if portfolio.user_id == current_user.id
       if portfolio.update(portfolio_params)
+        flash[:success] = "ポートフォリオを更新しました。"
         render json: portfolio
       else
         render json: getErrors(portfolio)
@@ -53,6 +54,7 @@ class PortfoliosController < ApplicationController
     portfolio = Portfolio.find(params[:id])
     if portfolio.user_id == current_user.id
       if portfolio&.destroy
+        flash[:success] = "ポートフォリオを削除しました。"
         render json: nil
       end
     end
@@ -66,11 +68,23 @@ class PortfoliosController < ApplicationController
       render json: nil
     end
   end
+
+  def getCategory
+    portfolios = Portfolio.where(category_id: params[:id]).includes(:user, :category).with_attached_image.order(created_at: :desc)
+    folios = image_with(portfolios) 
+    render json: folios
+  end
+
+  def search
+    portfolios = Portfolio.where("title LIKE ?", "%#{params[:q]}%").includes(:user, :category).with_attached_image.order(created_at: :desc)
+    folios = image_with(portfolios)
+    render json: folios
+  end
   
   private
   
   def portfolio_params
-    params.require(:portfolio).permit(:title, :url, :desc, :image).merge(user_id: current_user.id)
+    params.require(:portfolio).permit(:title, :url, :desc, :image, :category_id).merge(user_id: current_user.id)
   end
   
   def image_with(portfolios)
@@ -87,10 +101,6 @@ class PortfoliosController < ApplicationController
       tmp
     end
   end
-
-  # def redirect_root
-  #   redirect_to root_url unless logged_in?
-  # end
 
 end
   

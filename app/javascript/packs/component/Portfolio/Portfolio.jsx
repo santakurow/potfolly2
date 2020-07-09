@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Nav from "../Header/Nav"
-import Categories from "../Category/Categories"
+import CategoryNav from "../Category/CategoryNav"
 import { Paper, Typography, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import axios from "axios"
@@ -82,6 +82,13 @@ const Portfolio = (props) => {
     })
   }
 
+  const deleteFlashMessage = () => {
+    const flash_msg = document.getElementById("flash-msg");
+    if (flash_msg) {
+      flash_msg.style.display = "none";
+    }
+  }
+
   const detail = (
     <div className="container py-5">
       <div className="row">
@@ -102,10 +109,10 @@ const Portfolio = (props) => {
           <Typography variant="h3" className="font-weight-bold">
             {getPortfolio.title}
           </Typography>
-          <Typography variant="h4" className="mt-2">
+          <Typography variant="h5" className="mt-2">
             <a href={getPortfolio.url}>{getPortfolio.url}</a>
           </Typography>
-          <Typography variant="h5" className="mt-3" style={{color: "gray"}}>
+          <Typography variant="h5" className="mt-3" style={{color: "gray", whiteSpace: "pre-line"}}>
             {getPortfolio.desc}
           </Typography>
         </div>
@@ -118,7 +125,7 @@ const Portfolio = (props) => {
                 </Button>
               </a>
               :
-              <Link to={`/my-portfolio/${getPortfolio.id}/edit`} className="mypage-menu-btn">
+              <Link to={`/my-portfolio/${getPortfolio.id}/edit`} className="mypage-menu-btn" onClick={deleteFlashMessage}>
                 <Button variant="contained">
                   編集
                 </Button>
@@ -147,7 +154,7 @@ const Portfolio = (props) => {
       {props.match.url !== `/mypage/my-portfolio/${props.match.params.id}` ?
         <>
           <Nav />
-          <Categories />
+          <CategoryNav />
           {detail}
         </> :
         <div>

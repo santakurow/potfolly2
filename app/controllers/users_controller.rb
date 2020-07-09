@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     user = User.new(user_params)
     if user.save
       login user
+      flash[:success] = "ユーザーアカウントを登録しました。"
       render json: user
     else
       render json: getErrors(user)
@@ -15,6 +16,7 @@ class UsersController < ApplicationController
   def update
     @user.update(user_params)
     if @user.save
+      flash[:success] = "ユーザー情報を更新しました。"
       render json: @user
     else
       render json: getErrors(@user)

@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if authenticated? user
       login user
+      flash[:success] = "ログインしました。"
       render json: user
     else
       render json: "メールアドレスかパスワードが間違っています。"
@@ -21,6 +22,7 @@ class SessionsController < ApplicationController
   def destroy
     user = User.find(params[:id])
     logout if logged_in?
+    flash[:success] = "ログアウトしました。"
     render json: user
   end
 

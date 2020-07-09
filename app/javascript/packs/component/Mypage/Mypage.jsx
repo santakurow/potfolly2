@@ -137,6 +137,13 @@ const Mypage = (props) => {
       .catch(error => console.log(error));
   }
 
+  const deleteFlashMessage = () => {
+    const flash_msg = document.getElementById("flash-msg");
+    if (flash_msg) {
+      flash_msg.style.display = "none";
+    }
+  }
+
   const menuIcons = [
     <AccountCircleIcon />,
     <PhotoCameraIcon />,
@@ -151,7 +158,7 @@ const Mypage = (props) => {
   const menuRouteLists = [
     { 'プロフィール': "/profile" },
     { '写真': "/upload-avatar"},
-    { 'パスワード': "/edit-mail-pass"},
+    { 'パスワード': "/reset-password"},
     { 'ログアウト': "/logout" }
   ]
 
@@ -183,7 +190,9 @@ const Mypage = (props) => {
       <Divider />
       <List>
         {menuRouteLists.map((text, index) => (
-          <Link to={`/mypage${Object.values(text)}`} className="mypage-menu-btn" key={Object.keys(text)}>
+          <Link to={`/mypage${Object.values(text)}`} className="mypage-menu-btn" key={Object.keys(text)}
+            onClick={deleteFlashMessage}
+          >
             <ListItem button>
               <ListItemIcon>{menuIcons[index]}</ListItemIcon>
               <ListItemText
@@ -198,7 +207,8 @@ const Mypage = (props) => {
       <List>
         {portfolioRouteLists.map((text, index) => (
           <Link to={`${Object.values(text)}`}
-            className="mypage-menu-btn" key={Object.keys(text)}>
+            className="mypage-menu-btn" key={Object.keys(text)}
+            onClick={deleteFlashMessage}>
             <ListItem button>
               <ListItemIcon>{portfolioIcons[index]}</ListItemIcon>
               <ListItemText
@@ -215,7 +225,7 @@ const Mypage = (props) => {
             </ListItemIcon>
             <ListItemText
               primary="ポートフォリオ公開"
-              style={{color: "#333"}}
+              style={{ color: "#333" }}
             />
           </ListItem>
         </a>

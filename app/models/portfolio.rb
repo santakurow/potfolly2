@@ -8,6 +8,7 @@ class Portfolio < ApplicationRecord
   validates :url, presence: true, format: {with: VALID_URL_REGEX}
 
   belongs_to :user
+  belongs_to :category
 
   has_one_attached :image
 

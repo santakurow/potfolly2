@@ -2,7 +2,7 @@ import React from 'react'
 
 import Jumbotron from "./Jumbotron"
 import Nav from './Header/Nav'
-import Categories from "./Category/Categories"
+import CategoryNav from "./Category/CategoryNav"
 import Portfolios from "./Portfolio/Portfolios"
 
 import axios from "axios"
@@ -24,9 +24,9 @@ const Home = () => {
   return (
     <div>
       <Nav />
-      <Categories />
-      {logged_in ? <>{/* Not component */}</> : <Jumbotron />}
-      <div style={{ background: "#f0f0f0" }}>
+      <CategoryNav />
+      {logged_in ? <></> : <Jumbotron />}
+      <div style={{ background: "" }}>
         <Portfolios />
       </div>
       

@@ -9,6 +9,7 @@ class PasswordResetsController < ApplicationController
         user.update_attribute(:password_digest, user.reset_digest)
         login user
         user.update_attribute(:reset_digest, nil)
+        flash[:success] = "パスワードを変更しました。"
         render json: user
       else
         render json: getErrors(user)
