@@ -1,24 +1,31 @@
-# README
+# Potfolly
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+ポートフォリオ、技術共有サイト
 
-Things you may want to cover:
+## 仕様
 
-* Ruby version
+### フレームワーク
+- Ruby on Rails6 (サーバーサイド)
+- React.js (フロントエンド)
 
-* System dependencies
+### ライブラリ
+- Bootstrap
+- material-ui
+- jQuery
 
-* Configuration
+### DB
+- MySQL
+- postgresql
 
-* Database creation
+### モジュールバンドラー
+- Webpack
 
-* Database initialization
+### テスト
+- RSpec
 
-* How to run the test suite
+### デプロイ
+- heroku (本体)
+- AWS S3 (画像データ)
 
-* Services (job queues, cache servers, search engines, etc.)
+## DB設計
 
-* Deployment instructions
-
-* ...
