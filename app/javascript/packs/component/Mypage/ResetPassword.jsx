@@ -11,9 +11,9 @@ const ResetPassword = (props) => {
   const [isResetPasswordError, setIsResetPasswordError] = useState(false);
   const [isResetPasswordConfirmationError, setIsResetPasswordConfirmationError] = useState(false);
 
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [resetPasswordErrorMessage, setResetPasswordErrorMessage] = useState("");
-  const [resetPasswordConfirmationErrorMessage, setResetPasswordConfirmationErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(new Array);
+  const [resetPasswordErrorMessage, setResetPasswordErrorMessage] = useState(new Array);
+  const [resetPasswordConfirmationErrorMessage, setResetPasswordConfirmationErrorMessage] = useState(new Array);
 
   const [isDisable, setIsDisable] = useState(false);
 

@@ -191,6 +191,15 @@ const Edit = (props) => {
     }
   ]
 
+  const errorMessageList = (error_msg) => {
+    if (error_msg) {
+      const e = error_msg.map((msg, i) => (
+        <li key={i}>{msg}</li>
+      ))
+      return e;
+    }
+  }
+
   return (
     <div className={`container ${classes.root} text-center`}>
 
@@ -227,11 +236,11 @@ const Edit = (props) => {
           <TextField
             id="title"
             className={`${classes.formFiled}`}
-            label="(必須) 作品名"
+            label="（必須）作品名"
             name="title"
             variant="outlined"
             error={isTitleError}
-            helperText={titleErrorMessage}
+            helperText={errorMessageList(titleErrorMessage)}
             onChange={e => setTitle(e.target.value)}
             value={title}
           />
@@ -240,12 +249,12 @@ const Edit = (props) => {
           <TextField
             id="url"
             className={`${classes.formFiled}`}
-            label="関連URL"
+            label="（必須）関連URL (例: http://sample.com, https://sample.com)"
             name="url"
             type="url"
             variant="outlined"
             error={isUrlError}
-            helperText={urlErrorMessage}
+            helperText={errorMessageList(urlErrorMessage)}
             onChange={e => setUrl(e.target.value)}
             value={url}
           />
